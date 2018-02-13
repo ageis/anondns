@@ -1,0 +1,13 @@
+[Unit]
+Description=Prometheus exporter for Tor
+Requires=tor.service
+After=network.target tor.service
+
+[Service]
+ExecStart=/usr/bin/prometheus-tor-exporter.py -p 9053
+KillMode=process
+User=debian-tor
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,47 @@
+[DEFAULT]
+ignoreip = {{ fail2ban_ignoreip }} {{ ip_address.stdout }}
+ignorecommand =
+bantime  = {{ fail2ban_bantime }}
+findtime = {{ fail2ban_findtime }}
+maxretry = {{ fail2ban_maxretry }}
+backend = auto
+usedns = warn
+logencoding = auto
+enabled = false
+filter = %(__name__)s
+
+destemail = {{ sysadmin_email_address }}
+sender = root@localhost
+mta = sendmail
+
+protocol = tcp
+chain = INPUT
+port = 0:65535
+
+fail2ban_agent = Fail2Ban/%(fail2ban_version)s
+
+banaction = iptables-multiport
+banaction_allports = iptables-allports
+
+action_ = %(banaction)s[name=%(__name__)s, bantime="%(bantime)s", port="%(port)s", protocol="%(protocol)s", chain="%(chain)s"]
+action_mw = %(banaction)s[name=%(__name__)s, bantime="%(bantime)s", port="%(port)s", protocol="%(protocol)s", chain="%(chain)s"]
+            %(mta)s-whois[name=%(__name__)s, sender="%(sender)s", dest="%(destemail)s", protocol="%(protocol)s", chain="%(chain)s"]
+action_mwl = %(banaction)s[name=%(__name__)s, bantime="%(bantime)s", port="%(port)s", protocol="%(protocol)s", chain="%(chain)s"]
+             %(mta)s-whois-lines[name=%(__name__)s, sender="%(sender)s", dest="%(destemail)s", logpath=%(logpath)s, chain="%(chain)s"]
+action_xarf = %(banaction)s[name=%(__name__)s, bantime="%(bantime)s", port="%(port)s", protocol="%(protocol)s", chain="%(chain)s"]
+             xarf-login-attack[service=%(__name__)s, sender="%(sender)s", logpath=%(logpath)s, port="%(port)s"]
+action_cf_mwl = cloudflare[cfuser="%(cfemail)s", cftoken="%(cfapikey)s"]
+                %(mta)s-whois-lines[name=%(__name__)s, sender="%(sender)s", dest="%(destemail)s", logpath=%(logpath)s, chain="%(chain)s"]
+action_blocklist_de  = blocklist_de[email="%(sender)s", service=%(filter)s, apikey="%(blocklist_de_apikey)s", agent="%(fail2ban_agent)s"]
+action_badips = badips.py[category="%(__name__)s", banaction="%(banaction)s", agent="%(fail2ban_agent)s"]
+action_badips_report = badips[category="%(__name__)s", agent="%(fail2ban_agent)s"]
+action = %(action_)s
+
+[sshd]
+
+enabled = true
+port    = ssh
+filter  = sshd
+logpath = %(sshd_log)s
+backend = %(sshd_backend)s
+maxretry = {{ fail2ban_maxretry }}

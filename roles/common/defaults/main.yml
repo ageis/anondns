@@ -1,0 +1,61 @@
+---
+swapfile_size: 512M
+vm_swappiness: 1
+
+timezone: "America/Los_Angeles"
+
+common_packages:
+  - apparmor
+  - apparmor-profiles
+  - apparmor-profiles-extra
+  - apparmor-utils
+  - apt-show-versions
+  - apt-transport-https
+  - apt-transport-tor
+  - curl
+  - dbus
+  - fail2ban
+  - git-core
+  - haveged
+  - htop
+  - joe
+  - libicu-dev
+  - libffi-dev
+  - libssl-dev
+  - libxml2-dev
+  - libxslt-dev
+  - netselect-apt
+  - ntp
+  - ntpdate
+  - python3-dev
+  - python3-pip
+  - rsync
+  - screen
+  - sudo
+  - tmux
+  - tree
+  - ufw
+  - vim
+
+fail2ban_ignoreip: '127.0.0.1/8'
+fail2ban_bantime: 86400
+fail2ban_findtime: 900
+fail2ban_maxretry: 5
+
+sysadmin_email_address: "{{ certbot_admin_email }}"
+
+ufw_allowed_tcp_ports:
+  - 22
+  - 80
+  - 443
+
+coredumps_limit: unlimited
+coredumps_directory: /var/lib/systemd/coredump
+coredumps_file_pattern: core-%p-%u-%g-%s-%t-%e
+coredumps_script_dest_path: "{{ '/usr/bin/log-core-dump' if ansible_kernel.endswith('-grsec') else '/usr/local/bin/log-core-dump' }}"
+coredumps_script_src_path: log-core-dump.j2
+coredumps_pattern: "|{{ coredumps_script_dest_path }} {{ coredumps_file_pattern }} %e %u"
+coredumps_sysctl_options:
+  kernel.core_pattern: "{{ coredumps_pattern }}"
+  kernel.core_uses_pid: 1
+  fs.suid_dumpable: 2

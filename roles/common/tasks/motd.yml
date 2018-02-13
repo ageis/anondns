@@ -1,0 +1,28 @@
+---
+- name: Set hostname.
+  hostname:
+    name: "{{ inventory_hostname }}"
+
+- name: Get the current kernel version string.
+  command: uname -snrvm
+  register: kernel_version_string
+
+- name: Check if kernel version is already part of the motd.
+  command: grep -Fxq "{{ kernel_version_string }}" /var/run/motd.dynamic
+  register: check_dynamic_motd
+  check_mode: no
+  ignore_errors: yes
+  changed_when: no
+
+- name: Check if motd update hook for kernel version is present.
+  stat:
+    path: '/etc/update-motd.d/10-uname'
+  register: update_motd_uname
+
+- name: Install motd (message of the day).
+  template:
+    src: motd.j2
+    dest: /etc/motd
+    owner: root
+    group: root
+    mode: "0644"

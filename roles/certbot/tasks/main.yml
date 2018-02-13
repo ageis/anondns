@@ -1,0 +1,26 @@
+---
+- name: Install certbot.
+  pip:
+    name: certbot
+    state: latest
+
+- name: Ensure webservers are stopped.
+  service:
+    name: "{{ item }}"
+    state: stopped
+  ignore_errors: yes
+  with_items:
+    - nginx
+    - apache2
+
+- name: Generate certificate.
+  command: "certbot certonly --noninteractive --agree-tos --standalone --email {{ certbot_admin_email }} --rsa-key-size 4096 -d {{ inventory_hostname }}"
+  args:
+    creates: "{{ certbot_output_dir }}"
+
+- name: Create a daily cron job to automatically renew the certificate.
+  cron: 
+    name: "automatic LetsEncrypt certificate renewal"
+    special_time: weekly
+    job: "certbot renew --standalone --no-self-upgrade --pre-hook \"systemctl stop nginx\" --post-hook \"systemctl start nginx\" --quiet"
+    state: present

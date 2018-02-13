@@ -1,0 +1,24 @@
+---
+- name: reload prometheus
+  service:
+    name: prometheus
+    state: reloaded
+    enabled: yes
+
+- name: reload prometheus-alertmanager
+  service:
+    name: prometheus-alertmanager
+    state: stopped
+    enabled: no
+
+- name: restart prometheus-blackbox-exporter
+  service:
+    name: prometheus-blackbox-exporter
+    state: stopped
+    enabled: no
+
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted
+    enabled: yes

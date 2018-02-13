@@ -1,0 +1,4 @@
+-A PREROUTING ! -d 127.0.0.1/32 -p udp -m udp --dport 53 -j DNAT --to-destination 127.0.0.1
+-A PREROUTING ! -d 127.0.0.1/32 -p tcp -m tcp --dport 53 -j DNAT --to-destination 127.0.0.1
+-A OUTPUT -p udp -m owner ! --uid-owner 109 -m udp --dport 53 -j DNAT --to-destination 127.0.0.1
+-A OUTPUT -p tcp -m owner ! --uid-owner 109 -m tcp --dport 53 -j DNAT --to-destination 127.0.0.1

@@ -1,0 +1,28 @@
+---
+- name: Add signing key for nginx repository.
+  apt_key:
+    keyserver: keys.gnupg.net
+    id: ABF5BD827BD9BF62
+
+- name: Add nginx repository to sources.
+  apt_repository:
+    repo: "deb http://nginx.org/packages/debian/ stretch nginx"
+    state: present
+  register: add_nginx_repo
+
+- name: Update apt cache and install nginx.
+  apt:
+    name: nginx
+    state: latest
+    update_cache: yes
+  when: add_nginx_repo.changed
+    
+- name: Copy virtual host configuration file.
+  template:
+    dest: "/etc/nginx/conf.d/default.conf"
+    src: "nginx.conf.j2"
+    owner: root
+    group: root
+    mode: "0640"
+  notify: restart nginx
+  tags: nginx

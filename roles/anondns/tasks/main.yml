@@ -1,0 +1,155 @@
+---
+- name: Install dnsmasq and other stuff.
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - dnsmasq
+    - dnsmasq-base
+
+- name: Set dnsmasq to ignore resolv.conf
+  lineinfile:
+    dest: /etc/default/dnsmasq
+    regexp: "^#?IGNORE_RESOLVCONF"
+    line: "IGNORE_RESOLVCONF=yes"
+    state: present
+  notify: restart dnsmasq
+
+- name: Install dnsmasq configuration.
+  template:
+    src: dnsmasq.conf.j2
+    dest: /etc/dnsmasq.conf
+  notify: restart dnsmasq
+
+- name: Check if some stuff is installed.                                            
+  command: "dpkg-query -s {{ item }}"                                       
+  register: stuff_installed
+  failed_when: false
+  changed_when: false
+  with_items:
+    - isc-dhcp-client
+    - network-manager
+    - resolvconf
+    - ufw
+    - systemd
+
+- name: Configure dhclient.conf.
+  lineinfile:
+    dest: /etc/dhcp/dhclient.conf
+    regexp: "^supersede domain-name-servers"
+    line: "supersede domain-name-servers 127.0.0.1;"
+    state: present
+  when: "item.item == 'isc-dhcp-client' and item.rc == 0"
+  with_items: "{{ stuff_installed.results }}"
+
+- name: Configure NetworkManager.conf.
+  lineinfile:
+    dest: /etc/NetworkManager/NetworkManager.conf
+    regexp: "^#?dns="
+    line: "dns=none"
+    insertafter: "^[main]$"
+    insertbefore: "^[ifupdown]$"
+    state: present
+  when: "item.item == 'network-manager' and item.rc == 0"
+  with_items: "{{ stuff_installed.results }}"
+
+- name: Configure resolvconf.
+  lineinfile:
+    dest: /etc/resolvconf.conf
+    regexp: "^#?name_servers="
+    line: "name_servers=\"127.0.0.1\""
+    state: present
+    create: yes
+  notify: restart resolvconf
+  when: "item.item == 'resolvconf' and item.rc == 0"
+  with_items: "{{ stuff_installed.results }}"
+
+- name: Copy resolv.conf to server.
+  copy:
+    src: resolv.conf
+    dest: /etc/resolv.conf
+
+- name: Run resolvconf update and then disable-updates.
+  shell: "resolvconf -u && resolvconf --disable-updates"
+  with_items: "{{ stuff_installed.results }}"
+  when: "item.item == 'resolvconf' and item.rc == 0"
+
+- name: Configure systemd-resolved.                                          
+  lineinfile:                                                                   
+    dest: /etc/systemd/resolved.conf                                        
+    regexp: "{{ item.regexp }}"                                                 
+    line: "{{ item.line }}"      
+    insertafter: "^[Resolve]$"                                              
+    state: present                                                              
+  with_items:                                                                   
+      - regexp: "^#?DNS="                                                   
+        line: "DNS=127.0.0.1"                                               
+      - regexp: "^#?DNSSEC="                                            
+        line: "DNSSEC=yes"                                        
+      - regexp: "^#?Cache="                                                  
+        line: "Cache=yes"                                              
+      - regexp: "^#?DNSStubListener="                                             
+        line: "DNSStubListener={{ 'no' if public_dns_server else 'udp' }}"
+  notify: restart systemd-resolved                           
+
+- name: Direct DNS requests to other servers to ours.
+  iptables:
+    table: nat
+    chain: PREROUTING
+    destination: 127.0.0.1/32
+    protocol: "{{ item }}"
+    match: "{{ item }}"
+    destination_port: 53
+    jump: DNAT
+    to_destination: 127.0.0.1
+  with_items:
+    - "udp"
+    - "tcp"
+
+- name: Direct any application besides dnsmasq to use our server.
+  iptables:
+    table: nat
+    chain: OUTPUT
+    protocol: "{{ item }}"
+    uid_owner: "!dnsmasq"
+    destination_port: 53
+    jump: DNAT
+    to_destination: 127.0.0.1
+  with_items:
+    - "udp"
+    - "tcp"
+  tags: match
+
+- name: Enable route_localnet and packet forwarding.
+  sysctl:
+    name: "{{ item }}"
+    value: 1
+    sysctl_set: yes
+    reload: yes
+  with_items:
+    - "net.ipv4.conf.{{ ansible_default_ipv4.interface }}.route_localnet"
+    - "net.ipv4.ip_forward"
+
+- name: Set UFW's default forward policy to accept.
+  lineinfile:
+    dest: /etc/default/ufw
+    regexp: "^#DEFAULT_FORWARD_POLICY="
+    line: "DEFAULT_FORWARD_POLICY=\"ACCEPT\""
+    state: present
+  notify: reload ufw
+  when: "item.item == 'ufw' and item.rc == 0"
+  with_items: "{{ stuff_installed.results }}"
+
+- name: Open DNS port 53 to the public internet.
+  ufw:
+    rule: allow
+    port: 53
+    proto: "{{ item }}"
+    comment: "Public anonymizing DNS server"
+  with_items:
+    - udp
+    - tcp
+  when: "public_dns_server"
+  notify: reload ufw
+  tags: ufw
+

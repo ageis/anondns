@@ -1,0 +1,39 @@
+---
+- name: Add signing key for Tor Project.
+  apt_key:
+    keyserver: keys.gnupg.net
+    id: EE8CBC9E886DDD89
+
+- name: Install Tor Project apt repository.
+  apt_repository:
+    repo: "deb http://deb.torproject.org/torproject.org/ stretch main"
+    filename: torproject
+    state: present
+
+- name: Install Tor.
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+  with_items:
+    - tor
+    - tor-geoipdb
+    - deb.torproject.org-keyring
+
+- name: Configure Tor.
+  template:
+    src: torrc.j2
+    dest: /etc/tor/torrc
+    owner: root
+    group: root
+    mode: "0644"
+  tags: config
+  notify: restart tor
+
+- name: Modify logrotate policy to keep stuff around longer.
+  lineinfile:
+    dest: /etc/logrotate.d/tor
+    regexp: "^	rotate"
+    line: "	rotate {{ tor_log_retention_days }}"
+    state: present

@@ -1,0 +1,14 @@
+---
+- name: Limit the total size of journald logs.
+  lineinfile:
+    dest: /etc/systemd/journald.conf
+    regexp: "^SystemMaxUse="
+    line: "SystemMaxUse=512M"
+  notify: restart systemd-journald
+
+- name: Limit the size of each journald log file.
+  lineinfile:
+    dest: /etc/systemd/journald.conf
+    regexp: "^SystemMaxFileSize="
+    line: "SystemMaxFileSize=64M"
+  notify: restart systemd-journald

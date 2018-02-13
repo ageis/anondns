@@ -1,0 +1,11 @@
+---
+prometheus_external_url: 'https://{{ inventory_hostname }}/prometheus'
+prometheus_alertmanager_url: 'https://{{ inventory_hostname }}/alertmanager'
+prometheus_blackbox_exporter_url: '127.0.0.1:9115'
+prometheus_alertmanager_email_address: 'kevin@calyxinstitute.org'
+prometheus_alertmanager_receiver: 'alerts'
+prometheus_scrape_interval: 120s
+prometheus_scrape_timeout: 30s
+prometheus_log_level: 'warn'
+prometheus_alertmanager_log_level: 'warn'
+prometheus_blackbox_exporter_log_level: 'warn'

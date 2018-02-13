@@ -1,0 +1,13 @@
+---
+- name: Specify allowed incoming TCP ports in firewall config.
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  with_items:
+    - "{{ ufw_allowed_tcp_ports }}"
+
+- name: Ensure UFW is running.
+  ufw:
+    name: ufw
+    state: enabled

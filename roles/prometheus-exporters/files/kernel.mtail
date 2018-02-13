@@ -1,0 +1,105 @@
+# derived from https://phabricator.wikimedia.org/T147923
+# Syslog decorator
+def syslog {/(?P<date>(?P<legacy_date>\w+\s+\d+\s+\d+:\d+:\d+)|(?P<rfc3339_date>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d+[+-]\d{2}:\d{2}))/ +
+  /\s+(?:\w+@)?(?P<hostname>[\w\.-]+)\s+(?P<application>[\w\.-]+)(?:\[(?P<pid>\d+)\])?:\s+(?P<message>.*)/ {
+    len($legacy_date) > 0 {
+      strptime($2, "Jan _2 15:04:05")
+    }
+    len($rfc3339_date) > 0 {
+      strptime($rfc3339_date, "2006-01-02T15:04:05-0700")
+    }
+    next
+  }
+}
+
+@syslog {
+  /kernel:/ {
+    counter kernel_mce_events
+    /mce: .*Machine check events logged/ {
+      kernel_mce_events++
+    }
+
+    counter kernel_cpu_throttled
+    /above threshold, cpu clock throttled/ {
+      kernel_cpu_throttled++
+    }
+
+    counter kernel_edac_events
+    / EDAC / {
+      kernel_edac_events++
+    }
+
+    # This must be explicitly anchored to properly match.
+    counter kernel_oom_kill by binary
+    /kernel: \[[\d.]+\] (?P<binary>[\S]+) invoked oom-killer:/ {
+      kernel_oom_kill[$binary]++
+    }
+
+    # Note, this must be explicitly anchored.
+    counter kernel_segfault by binary
+    /kernel: \[[\d.]+\] (?P<binary>[^\[]+)\[\d+\]: segfault at/ {
+      kernel_segfault[$binary]++
+    }
+
+    counter kernel_hung_tasks_total by binary
+    # Nov  3 16:43:15 36com30 kernel: INFO: task dockerd:20834 blocked for more than 10 seconds.
+    /task *(?P<binary>[\S]+):\d+ blocked for more than/ {
+      kernel_hung_tasks_total[$binary]++
+    }
+
+    counter kernel_warnings_total
+    /WARNING/ {
+      kernel_warnings_total++
+    }
+
+    counter kernel_drive_errors by drive
+    # Nov  3 16:43:15 36com30 kernel: [17274892.473220] Buffer I/O error on dev sdm, logical block 0, async page read
+    /Buffer I\/O error on dev (?P<drive>[^ ,]+)/ {
+      kernel_drive_errors[$drive]++
+    }
+
+    # blk_update_request: I/O error, dev sde, sector 3820821504
+    /blk_update_request: I\/O error, dev (?P<drive>[^,]+), sector/ {
+      kernel_drive_errors[$drive]++
+    }
+
+    # https://www.kernel.org/doc/Documentation/RCU/stallwarn.txt
+    counter kernel_rcu_stalls
+    /INFO: rcu_[^ ]+ detected stalls? on/ {
+      kernel_rcu_stalls++
+    }
+
+    #[79930.617938] SLUB: Unable to allocate memory on node -1 (gfp=0x2080020)
+    #[79930.624461]   cache: kmalloc-128(5121:7d7cfddb42ba413fbd9a4f599525ad5e2727e799039d5a31b2010c990367f875), object size: 128, buffer size: 128, default order: 0, min order: 0
+    counter kernel_slub_allocation_failures
+    /SLUB: Unable to allocate memory/ {
+      kernel_slub_allocation_failures++
+    }
+
+    #[82114.305549] Memory cgroup out of memory: Kill process 14143 (python) score 977 or sacrifice child
+    #[82114.314467] Killed process 14143 (python) total-vm:351792kB, anon-rss:249464kB, file-rss:5956kB
+    counter kernel_memory_cgroup_limit_exceeded by binary
+    /Memory cgroup out of memory: Kill process [\d]+ \((?P<binary>[^)]+)\)/ {
+      kernel_memory_cgroup_limit_exceeded[$binary]++
+    }
+
+    #tpm_tis 00:0b: A TPM error (7) occurred attempting get random
+    counter kernel_tpm_errors by errorcode
+    /A TPM error \((?P<errorcode>\d+)\) occurred/ {
+      kernel_tpm_errors[$errorcode]++
+    }
+
+    #[393491.269655] sd 10:0:6:0: attempting task abort! scmd(ffff8801cb926e80)
+    #[393491.276272] sd 10:0:6:0: [sdg] tag#5 CDB: Synchronize Cache(10) 35 00 00 00 00 00 00 00 00 00
+    #[393491.284913] scsi target10:0:6: handle(0x0010), sas_address(0x500163600213cfc6), phy(6)
+    #[393491.292914] scsi target10:0:6: enclosure_logical_id(0x500163600213cffd), slot(6)
+    #[393491.300391] scsi target10:0:6: enclosure level(0x0000),connector name(    ^C)
+    #[393491.788221] sd 10:0:6:0: task abort: SUCCESS scmd(ffff8801cb926e80)
+    # Unfortunately, log lines like above can't be mapped to /dev/sd* easily; thus log the scsi bus address.
+    counter kernel_scsi_task_abort by address
+    /sd (?P<address>\d+:\d+:\d+:\d+): attempting task abort/ {
+      kernel_scsi_task_abort[$address]++
+    }
+  }
+}
+

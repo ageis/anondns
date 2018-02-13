@@ -1,0 +1,9 @@
+Unattended-Upgrade::Origins-Pattern {
+        "o=Debian,n=stretch-updates";
+        "o=Debian,n=stretch,l=Debian-Security";
+        "o=TorProject,n=stretch";
+        "o=packagecloud.io/grafana/stable,n=stretch";
+};
+Unattended-Upgrade::Remove-Unused-Dependencies "true";
+Unattended-Upgrade::Automatic-Reboot "false";
+Unattended-Upgrade::SyslogEnable "true";

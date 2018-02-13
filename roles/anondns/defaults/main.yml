@@ -1,0 +1,8 @@
+---
+public_dns_server: false
+dnssec_enabled: true
+dnssec_check_unsigned: false
+fallback_nameservers:
+  - "9.9.9.9" # Quad9
+  - "8.8.8.8" # Google
+  - "208.67.222.222" # OpenDNS

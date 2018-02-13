@@ -1,0 +1,13 @@
+---
+# the following task depends on the 'dnsutils' package being installed locally
+- name: Figure out local public-facing IP address
+  local_action: command dig +short myip.opendns.com @resolver1.opendns.com
+  changed_when: false
+  register: ip_address
+  become: no
+
+- name: Update Fail2ban configuration
+  template:
+    src: jail.local.j2
+    dest: /etc/fail2ban/jail.local
+  notify: restart fail2ban

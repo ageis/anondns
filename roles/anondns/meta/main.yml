@@ -1,0 +1,14 @@
+---
+  galaxy_info:
+    author: Kevin Gallagher (@ageis)
+    description: Configures a DNS server to anonymize requests via Tor.
+    company: Calyx Institute
+    license: MIT
+    min_ansible_version: 2.4.3
+    platforms:
+      - name: Debian
+        versions:
+        - stretch
+    categories:
+      - system
+  dependencies: []

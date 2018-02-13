@@ -1,0 +1,51 @@
+---
+- name: Set core file size to unlimited
+  pam_limits:
+    domain: '*'
+    limit_type: "{{ item }}"
+    limit_item: core
+    value: "{{ coredumps_limit }}"
+  with_items:
+    - hard
+    - soft
+
+- name: Allow core dump from all daemons started by systemd
+  lineinfile:
+    dest: /etc/systemd/coredump.conf
+    regexp: '^#?DefaultLimitCORE'
+    line: 'DefaultLimitCORE=infinity'
+    state: present
+    create: yes
+  # Only setting 'infinity' for limit in in systemd config if it's been set
+  # in sysctl. It may be appropriate to reuse the `coredumps_limit` var, but
+  # I haven't tested that yet, so not implementing. TODO: test it.
+  when: coredumps_limit in ['unlimited', 'infinity']
+
+- name: Adjust sysctl vars for core dumps
+  sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  with_dict: "{{ coredumps_sysctl_options }}"
+
+- name: Create directory for storing core dumps
+  file:
+    path: "{{ coredumps_directory }}"
+    owner: root
+    group: root
+    mode: "0750"
+
+- name: Create notification script for logging core dumps
+  template:
+    src: "{{ coredumps_script_src_path }}"
+    dest: "{{ coredumps_script_dest_path }}"
+    owner: root
+    group: root
+    mode: "0750"
+  when: coredumps_pattern.startswith('|'+coredumps_script_dest_path)
+
+- name: Remove notification script if not used
+  file:
+    path: "{{ coredumps_script_dest_path }}"
+    state: absent
+  when: not coredumps_pattern.startswith('|'+coredumps_script_dest_path)

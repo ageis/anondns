@@ -1,0 +1,12 @@
+{% if check_dynamic_motd.rc != 0 and update_motd_uname.stat.exists == False %}
+{{ kernel_version_string.stdout }}
+{% endif %}
+ mmmmm                                                                
+ #   "# m   m   m mm   mmm   m   m   mmm   m mm    mmm    mmm    mmm  
+ #mmm#" #   #   #"  " #   "  #   #  "   #  #"  #  #"  "  #"  #  #   " 
+ #      #   #   #      """m  #   #  m"""#  #   #  #      #""""   """m 
+ #      "mm"#   #     "mmm"  "mm"#  "mm"#  #   #  "#mm"  "#mm"  "mmm" 
+
+Hostname: {{ ansible_fqdn }}
+IP address: {{ ansible_default_ipv4.address }}
+

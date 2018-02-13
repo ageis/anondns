@@ -1,0 +1,13 @@
+---
+- name: restart fail2ban
+  service:
+    name: fail2ban
+    state: restarted
+
+- name: update timezone
+  command: dpkg-reconfigure --frontend noninteractive tzdata
+
+- name: restart systemd-journald
+  service:
+    name: systemd-journald
+    state: restarted

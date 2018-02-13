@@ -1,0 +1,43 @@
+global:
+  smtp_smarthost: 'localhost:25'
+  smtp_from: '{{ prometheus_alertmanager_email_address }}'
+  smtp_auth_username: 'prometheus'
+  smtp_auth_password: 'USK8vd93cZfMT83u'
+{% if slack_alert_api_url is defined %}
+  slack_api_url: '{{ slack_alert_api_url }}'
+{% endif %}
+
+route:
+  group_by: ['alertname', 'instance']
+  group_wait: 30s
+  group_interval: 10m
+  repeat_interval: 4h
+{% if slack_alert_api_url is defined %}
+  receiver: slack
+{% else %}
+  receiver: alerts
+{% endif %}
+  routes:
+   - match:
+       severity: critical
+     receiver: {{ prometheus_alertmanager_receiver }}
+   - match:
+       severity: warning
+     receiver: {{ prometheus_alertmanager_receiver }}
+
+{% if slack_alert_api_url is defined %}
+receivers:
+- name: slack
+  slack_configs:
+  - api_url: '{{ slack_alert_api_url }}'
+    send_resolved: true
+    channel: '#alerts'
+{%- raw %}
+    text: '{{ .CommonAnnotations.description }}'
+{% endraw %}
+{% else %}
+receivers:
+- name: 'alerts'
+  email_configs:
+  - to: '{{ prometheus_alertmanager_email_address }}'
+{% endif %}

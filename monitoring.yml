@@ -1,0 +1,15 @@
+---
+- name: Configure Prometheus and Grafana.
+  hosts: tordns.party
+  become: yes
+  vars:
+    grafana_tls_cert_path: '/etc/letsencrypt/live/tordns.party/fullchain.pem'
+    grafana_tls_key_path: '/etc/letsencrypt/live/tordns.party/privkey.pem'
+  roles:
+    - role: prometheus
+      tags: prometheus
+    - role: grafana
+      tags: grafana
+    - role: prometheus-exporters
+      tags: exporters
+  tags: monitoring

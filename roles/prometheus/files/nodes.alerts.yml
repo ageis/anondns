@@ -1,0 +1,165 @@
+groups:
+- name: nodes.alerts
+  rules:
+  - alert: Host_Down
+    expr: up{job="nodes"} == 0
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      description: '{{ $labels.instance }} has been down for more than 5 minutes.'
+      summary: Host {{ $labels.instance }} down
+  - alert: Process_File_Descriptors_Almost_Exhausted
+    expr: process_open_fds / process_max_fds * 100 > 80
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      description: More than 80% of available file descriptors are used by {{ $labels.job
+        }} on {{ $labels.instance }}
+      summary: Process file descriptors exhausted on {{ $labels.instance }}
+  - alert: Process_Restarted_Frequently
+    expr: changes(process_start_time_seconds[20m]) > 10
+    labels:
+      severity: warning
+    annotations:
+      description: '{{ $labels.job }} on {{ $labels.instance }} is being frequently
+        restarted'
+      summary: Process {{ $labels.job }} on {{ $labels.instance }} is frequently restarting
+  - alert: All_CPUs_Saturated
+    expr: sum(node_cpu{mode!="idle"}) BY (instance) / sum(node_cpu) BY (instance)
+      > 0.95
+    for: 2m
+    labels:
+      severity: critical
+    annotations:
+      description: CPU utilisation across all cores is above 95% on {{ $labels.instance
+        }}
+      summary: CPU utilization high on {{ $labels.instance }}
+  - alert: Disk_Almost_Full
+    expr: max(1 - (node_filesystem_avail / node_filesystem_size)) WITHOUT (mountpoint)
+      > 0.95
+    labels:
+      severity: critical
+    annotations:
+      description: Device {{ $labels.device }} on {{ $labels.instance }} is more than
+        95% full
+      summary: Disk {{ $labels.device }} on {{ $labels.instance}} almost full
+  - alert: Inodes_Almost_Exhausted
+    expr: 1 - (node_filesystem_files_free / node_filesystem_files) > 0.95
+    labels:
+      severity: critical
+    annotations:
+      description: Device {{ $labels.device }} on {{ $labels.instance }} is using
+        more than 95% of available inodes
+      summary: Filesystem {{ $labels.device }} on {{ $labels.instance}} is close to
+        exhausting available inodes
+  - alert: IO_Wait_High
+    expr: node_cpu:irate{mode="iowait"} / node_cpu:count * 100 > 8
+    labels:
+      severity: warning
+    annotations:
+      description: I/O wait is high on {{ $labels.instance }}
+      summary: I/O wait high on {{ $labels.instance }}
+  - alert: Memory_Almost_Exhausted
+    expr: (sum(node_memory_MemTotal) - sum(node_memory_MemFree + node_memory_Buffers
+      + node_memory_Cached)) / sum(node_memory_MemTotal) * 100 > 95
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      description: Memory usage on {{ $labels.instance }} is above 95%
+      summary: Available memory almost exhausted on {{ $labels.instance }}
+  - alert: Systemd_Unit_Failed
+    expr: node_systemd_unit_state == 1
+    labels:
+      severity: warning
+    annotations:
+      description: Systemd unit {{ $labels.name }} on {{ $labels.instance }} failed
+      summary: Systemd unit {{ $labels.name }} on {{ $labels.instance }} failed
+  - alert: Low_Entropy
+    expr: node_entropy_available_bits < 100
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      description: '{{ $labels.instance }} has only {{ $value }} bits of entropy available'
+      summary: Low entropy on {{ $labels.instance }}
+  - alert: High_IO_Time
+    expr: rate(node_disk_io_time_weighted[2m]) > rate(node_disk_io_time_weighted[2h])
+      * 100
+    labels:
+      severity: warning
+    annotations:
+      description: Device {{ $labels.device }} on {{ $labels.instance }} has high
+        disk I/O
+      summary: Disk {{ $labels.device }} on {{ $labels.instance }} has high I/O activity
+  - alert: Interrupt_Storm
+    expr: sum(rate(node_cpu{mode=~"(soft)?irq"}[2m])) WITHOUT (cpu, mode) / sum(rate(node_cpu[2m]))
+      WITHOUT (cpu, mode) * 100 > 50
+    labels:
+      severity: warning
+    annotations:
+      description: IRQ CPU time is {{ $value | humanize }}%, probable IRQ storm
+      summary: Probable IRQ storm on {{ $labels.instance }}
+  - alert: Network_Interface_Receive_Saturation
+    expr: rate(node_network_receive_bytes[2m]) / (1e+10 / 8) * 100 > 50
+    labels:
+      severity: warning
+    annotations:
+      description: Network interface {{ $labels.device }} using {{ $value }}% of receive
+        capacity
+      summary: Network interface {{ $labels.device }} on {{ $labels.instance }} saturating
+        receive capacity
+  - alert: Network_Interface_Transmit_Saturation
+    expr: rate(node_network_receive_bytes[2m]) / (1e+10 / 8) * 100 > 50
+    labels:
+      severity: warning
+    annotations:
+      description: Network interface {{ $labels.device }} using {{ $value }}% of transmit
+        capacity
+      summary: Network interface {{ $labels.device }} on {{ $labels.instance }} saturating
+        transmit capacity
+  - alert: Kernel_Reported_Hung_Tasks
+    expr: increase(kernel_hung_tasks_total[2m]) > 0
+    labels:
+      severity: warning
+    annotations:
+      description: Kernel reported {{ $value | humanize }} hung tasks in last two
+        minutes; see /var/log/kern.log
+      summary: '{{ $value | humanize }} hung tasks detected on {{ $labels.instance
+        }}'
+  - alert: Drive_IO_Errors
+    expr: kernel_drive_errors != 0
+    labels:
+      severity: critical
+    annotations:
+      description: Drive IO errors detected on {{ $labels.drive }} on node {{ $labels.instance
+        }}
+      summary: I/O errors detected on {{ $labels.drive }} on node {{ $labels.instance
+        }}
+  - alert: Segfault
+    expr: kernel_segfault != 0
+    labels:
+      severity: critical
+    annotations:
+      description: Segmentation fault instigated by {{ $labels.binary }} on node {{
+        $labels.instance }}
+      summary: Segfault by {{ $labels.binary }} on {{ $labels.instance }}
+  - alert: OOM_Kill_Invoked
+    expr: kernel_oom_kill != 0
+    labels:
+      severity: critical
+    annotations:
+      description: The binary {{ $labels.binary }} ran out of memory and was killed
+        on node {{ $labels.instance }}
+      summary: OOM killer invoked for {{ $labels.binary }} on {{ $labels.instance
+        }}
+  - alert: CPU_Throttled
+    expr: kernel_cpu_throttled != 0
+    labels:
+      severity: critical
+    annotations:
+      description: The CPU clock rose above threshold and has been throttled on {{
+        $labels.instance }}
+      summary: CPU throttled on {{ $labels.instance }}

@@ -1,0 +1,10 @@
+---
+- name: Set timezone in /etc/timezone.
+  copy:
+    content: |
+      {{ timezone }}
+    dest: /etc/timezone
+    owner: root
+    group: root
+    mode: "0644"
+  notify: update timezone

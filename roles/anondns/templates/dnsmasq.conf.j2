@@ -1,0 +1,46 @@
+# Tor's DNSPort
+server=127.0.0.1#5353
+# Fallback DNS nameservers
+{% for host in fallback_nameservers %}
+server={{ host }}
+{% endfor %}
+cache-size=10000
+dns-forward-max=1024
+{% if dnssec_enabled == true %}
+dnssec
+proxy-dnssec
+conf-file=/usr/share/dnsmasq-base/trust-anchors.conf
+{% if dnssec_check_unsigned == true %}
+dnssec-check-unsigned
+{% endif %}
+{% endif %}
+domain-needed
+localmx
+selfmx
+{% if public_dns_server == true %}
+listen-address=0.0.0.0
+interface={{ ansible_default_ipv4.interface }}
+no-dhcp-interface={{ ansible_default_ipv4.interface }}
+except-interface=lo
+bogus-priv
+no-hosts
+{% else %}
+listen-address=127.0.0.1
+interface=lo
+no-dhcp-interface=lo
+except-interface={{ ansible_default_ipv4.interface }}
+local-service
+addn_hosts=/etc/hosts
+local-ttl=900
+{% endif %}
+log-async=24
+log-queries
+min-cache-ttl=300
+max-cache-ttl=7200
+no-negcache
+no-ping
+no-poll
+no-resolv
+port=53
+stop-dns-rebind
+strict-order

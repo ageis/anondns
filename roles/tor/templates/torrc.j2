@@ -1,0 +1,25 @@
+ControlPort 9051
+CookieAuthentication 1
+
+AutomapHostsOnResolve 1
+AutomapHostsSuffixes .onion
+DNSPort 127.0.0.1:5353
+VirtualAddrNetworkIPv4 10.192.0.0/10
+
+HiddenServiceDir /var/lib/tor/dns/
+HiddenServicePort 53 127.0.0.1:53
+HiddenServiceVersion 3
+#HiddenServiceSingleHopMode 1
+#HiddenServiceNonAnonymousMode 0
+
+HeartbeatPeriod 30minutes
+SafeLogging 0
+Sandbox 1
+
+Log notice file /var/log/tor/notice.log
+Log warn file /var/log/tor/warn.log
+
+SOCKSPolicy accept 127.0.0.1
+SOCKSPolicy accept {{ ansible_default_ipv4.interface }}
+SOCKSPolicy reject *
+SOCKSPort 127.0.0.1:9050 PreferSOCKSNoAuth

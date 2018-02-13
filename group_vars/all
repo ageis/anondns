@@ -1,0 +1,7 @@
+---
+certbot_admin_email: 'kevin@calyxinstitute.org'
+ufw_allowed_tcp_ports:
+  - 22
+  - 80
+  - 443
+  - 53

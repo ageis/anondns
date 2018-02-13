@@ -1,0 +1,26 @@
+#!/bin/bash
+
+coredump_filename=$1
+coredump_executable=$2
+coredump_uid=$3
+
+if [ $EUID -ne 0 ]; then
+  echo "Only root may run this script." 1>&2
+  exit 1
+fi
+
+if [ -t 0 ]; then
+  echo "No stdin pipe detected, exiting." 1>&2
+  exit 1
+fi
+
+if [ -z $coredump_filename ] || [ -z $coredump_executable ] || [ -z $coredump_uid ]; then
+  echo "Missing required arguments for handling core dump." 1>&2
+  exit 1
+fi
+
+/usr/bin/logger "Core dump detected: ${coredump_executable} owned by uid ${coredump_uid}"
+
+umask 277
+
+cat - > "{{ coredumps_directory }}/${coredump_filename}"

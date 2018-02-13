@@ -1,0 +1,117 @@
+---
+- name: Add signing key for Package Cloud.
+  apt_key:
+    url: https://packagecloud.io/gpg.key
+    state: present
+
+- name: Install Package Cloud repository.
+  apt_repository:
+    repo: "deb https://packagecloud.io/grafana/stable/debian/ stretch main"
+    filename: grafana
+    state: present
+    update_cache: yes
+
+- name: Install Grafana.
+  apt:
+    name: grafana
+    state: latest
+
+#- name: Move default configuration into place.
+#  command: "cp /usr/share/grafana/conf/defaults.ini /etc/grafana/grafana.ini"
+
+- name: Configure Grafana.
+  lineinfile:
+    dest: /etc/grafana/grafana.ini
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  with_items:
+    - regexp: "^; ?app_mode"
+      line: "app_mode = production"
+      insertbefore: "^[paths]"
+    - regexp: "^; ?instance_name"
+      line: "instance_name = {{ grafana_server_name }}"
+      insertbefore: "^[paths]"
+    - regexp: "^;?protocol"
+      line: "protocol = http"
+      insertafter: "^[server]"
+      insertbefore: "^[database]"
+    - regexp: "^;?http_port"
+      line: "http_port = 3000"
+      insertafter: "^[server]"
+      insertbefore: "^[database]"
+    - regexp: "^;?domain"
+      line: "domain = {{ grafana_server_name }}"
+      insertafter: "^[server]"
+      insertbefore: "^[database]"
+    - regexp: "^;?enforce_domain"
+      line: "enforce_domain = false"
+      insertafter: "^[server]"
+      insertbefore: "^[database]"
+    - regexp: "^;?root_url"
+      line: "root_url = https://{{ grafana_server_name }}/grafana"
+      insertafter: "^[server]"
+      insertbefore: "^[database]"
+    - regexp: "^;?enable_gzip"
+      line: "enable_gzip = true"
+      insertafter: "^[server]"
+      insertbefore: "^[database]"
+    - regexp: "^;?cert_file"
+      line: "cert_file = {{ grafana_tls_cert_path }}"
+      insertafter: "^[server]"
+      insertbefore: "^[database]"
+    - regexp: "^;?cert_key"
+      line: "cert_key = {{ grafana_tls_key_path }}"
+      insertafter: "^[server]"
+      insertbefore: "^[database]"
+    - regexp: "^;?cookie_secure"
+      line: "cookie_secure = true"
+      insertafter: "^[session]"
+      insertbefore: "^[dataproxy]"
+    - regexp: "^;?check_for_updates"
+      line: "check_for_updates = {{ grafana_updates_check }}"
+      insertafter: "^[analytics]"
+      insertbefore: "^[security]"
+    - regexp: "^;?disable_gravatar"
+      line: "disable_gravatar = {{ grafana_disable_gravatar }}"
+      insertafter: "^[security]"
+      insertbefore: "^[snapshots]"
+    - regexp: "^;?allow_sign_up"
+      line: "allow_sign_up = {{ grafana_allow_sign_up }}"
+      insertafter: "^[users]"
+      insertbefore: "^[auth]"
+    - regexp: "^;?allow_org_create"
+      line: "allow_org_create = {{ grafana_allow_org_create }}"
+      insertafter: "^[users]"
+      insertbefore: "^[auth]"
+    - regexp: "^;?auto_assign_org"
+      line: "auto_assign_org = {{ grafana_auto_assign_org }}"
+      insertafter: "^[users]"
+      insertbefore: "^[auth]"
+    - regexp: "^;?auto_assign_org_role"
+      line: "auto_assign_org_role = {{ grafana_auto_assign_org_role }}"
+      insertafter: "^[users]"
+      insertbefore: "^[auth]"
+    - regexp: "^;?default_theme"
+      line: "default_theme = {{ grafana_default_theme }}"
+      insertafter: "^[users]"
+      insertbefore: "^[auth]"
+    - regexp: "^;?disable_login_form"
+      line: "disable_login_form = {{ grafana_disable_login_form }}"
+      insertafter: "^[auth]"
+      insertbefore: "^[auth.anonymous]"
+    - regexp: "^;?enabled"
+      line: "enabled = {{ grafana_anonymous_auth }}"
+      insertafter: "^[auth.anonymous]"
+      insertbefore: "^[auth.github]"
+    - regexp: "^;?org_name"
+      line: "org_name = {{ grafana_org_name }}"
+      insertafter: "^[auth.anonymous]"
+      insertbefore: "^[auth.github]"
+  notify: restart grafana
+
+- name: Enable and start grafana-server.
+  service:
+    name: grafana-server
+    state: restarted
+    enabled: yes

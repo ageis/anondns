@@ -1,0 +1,39 @@
+---
+- include: update_everything.yml
+  tags: upgrade
+
+- include: packages.yml
+  tags: tools
+
+- include: make_swap.yml
+  tags: swap
+
+- include: coredumps.yml
+  tags: coredumps
+
+- include: add_github_ssh_hostkey.yml
+  tags: github
+
+- include: timezone.yml
+  tags: timezone
+
+- include: motd.yml
+  tags: motd
+
+- include: auto_upgrades.yml
+  tags: unattended
+
+- include: fail2ban.yml
+  tags: fail2ban
+
+- include: journald.yml
+  tags: journald
+
+- include: pip.yml
+  tags: pip
+
+- include: tweaks.yml
+  tags: tweaks
+
+- include: ufw.yml
+  tags: ufw

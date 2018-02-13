@@ -1,0 +1,3 @@
+ENABLED=1
+LOGS=/var/log/syslog
+PORT=3903

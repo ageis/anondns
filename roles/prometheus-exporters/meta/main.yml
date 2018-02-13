@@ -1,0 +1,14 @@
+---
+galaxy_info:
+  author: Kevin Gallagher (@ageis)
+  description: Installs node-exporter and mtail.
+  company: Calyx Institute
+  license: MIT
+  min_ansible_version: 2.4.2
+  platforms:
+    - name: Debian
+      versions:
+      - stretch
+  categories:
+    - system
+dependencies: []
