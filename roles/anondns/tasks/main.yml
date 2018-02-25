@@ -65,6 +65,20 @@
     create: yes
   when: "item.item == 'resolvconf' and item.rc == 0"
   with_items: "{{ stuff_installed.results }}"
+ 
+ 
+- name: Set resolvconf to aovid complaining about absence of a symlink, and to truncate nameservers after loopback.
+  lineinfile:
+    dest: /etc/default/resolvconf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item;ine }}"
+    state: present
+    create: yes
+  with_items:
+    - regexp: "#?TRUNCATE_NAMESERVER_LIST_AFTER_LOOPBACK_ADDRESS="
+      line: "TRUNCATE_NAMESERVER_LIST_AFTER_LOOPBACK_ADDRESS=yes"
+    - regexp: "#?REPORT_ABSENT_SYMLINK="
+      line: "REPORT_ABSENT_SYMLIN=no"
 
 - name: Copy resolv.conf to server.
   copy:
