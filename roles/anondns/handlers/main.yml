@@ -5,23 +5,29 @@
     state: restarted
     enabled: yes
 
-- name: restart resolvconf
+- name: stop resolvconf
   service:
     name: resolvconf
-    state: restarted
+    state: stopped
     enabled: no
 
-- name: reload ufw
+- name: enable ufw
   ufw:
     state: enabled
-  
-- name: restart systemd-resolved
+
+- name: stop systemd-resolved
   service:
     name: systemd-resolved
-    state: restarted
+    state: stopped
     enabled: no
 
-- name: restart NetworkManager
+- name: stop NetworkManager
   service:
-    name: NetworkManager
+    name: network-manager
     state: restarted
+
+  - name: restart tor
+  service:
+    name: tor
+    state: restarted
+    enabled: yes

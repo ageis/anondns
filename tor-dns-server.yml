@@ -1,15 +1,10 @@
 ---
 - name: Set up Tor-based DNS server.
   become: yes
-  hosts: tordns
+  hosts: localhost
   roles:
     - role: common
       tags: common
-    - role: tor
-      tags: tor
-      #- role: certbot
-      #tags: letsencrypt
     - role: anondns
       tags: dns
-    - role: prometheus-exporters                                                
-      tags: exporters 
+  import_playbook: monitoring

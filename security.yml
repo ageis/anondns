@@ -7,7 +7,7 @@
       os_auth_pam_passwdqc_enable: false
       os_auth_pw_max_age: 1460
       os_auth_lockout_time: 300
-      os_security_users_allow: ["kevin", "steve"]
+      os_security_users_allow: ["{{ anondns_user }}"]
       os_security_kernel_enable_core_dump: true
       os_security_suid_sgid_remove_from_unknown: true
       os_desktop_enable: false
@@ -73,8 +73,8 @@
       ssh_client_hardening: true
       ssh_server_cbc_required: false
       ssh_challengeresponseauthentication: true
-      ssh_allow_users: 'kevin'
-      ssh_allow_groups: 'kevin'
+      ssh_allow_users: "{{ anondns_user }}"
+      ssh_allow_groups: "{{ anondns_user }}"
       ssh_deny_users: 'root'
       ssh_deny_groups: 'root'
       ssh_authorized_keys_file: '/home/%u/.ssh/authorized_keys'

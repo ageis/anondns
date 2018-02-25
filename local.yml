@@ -1,0 +1,7 @@
+---
+- name: Apply AnonDNS locally.
+  hosts: localhost
+  become: yes
+  roles:
+    - role: anondns
+      role: anondns

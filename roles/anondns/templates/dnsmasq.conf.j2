@@ -1,9 +1,11 @@
 # Tor's DNSPort
 server=127.0.0.1#5353
 # Fallback DNS nameservers
+{% if nameserver_fallbacks == true %}
 {% for host in fallback_nameservers %}
 server={{ host }}
 {% endfor %}
+{% endif %}
 cache-size=10000
 dns-forward-max=1024
 {% if dnssec_enabled == true %}

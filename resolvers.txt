@@ -1,0 +1,5 @@
+https://thesprawl.org/projects/dnschef/
+acrylic.txt
+ ttps://wiki.archlinux.org/index.php/Tor#Using_TorDNS_for_all_DNS_queries 
+ https://tor.stackexchange.com/questions/7212/how-do-i-resolve-dns-using-tor/14594#14594
+ l

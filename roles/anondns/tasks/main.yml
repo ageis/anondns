@@ -1,4 +1,7 @@
 ---
+- include_tasks: tor.yml
+  tags: tor
+
 - name: Install dnsmasq and other stuff.
   apt:
     name: "{{ item }}"
@@ -47,7 +50,7 @@
     dest: /etc/NetworkManager/NetworkManager.conf
     regexp: "^#?dns="
     line: "dns=none"
-    insertafter: "^[main]$"
+    #insertafter: "^[main]$"
     insertbefore: "^[ifupdown]$"
     state: present
   when: "item.item == 'network-manager' and item.rc == 0"
@@ -60,7 +63,6 @@
     line: "name_servers=\"127.0.0.1\""
     state: present
     create: yes
-  notify: restart resolvconf
   when: "item.item == 'resolvconf' and item.rc == 0"
   with_items: "{{ stuff_installed.results }}"
 
@@ -73,6 +75,7 @@
   shell: "resolvconf -u && resolvconf --disable-updates"
   with_items: "{{ stuff_installed.results }}"
   when: "item.item == 'resolvconf' and item.rc == 0"
+  notify: stop resolvconf
 
 - name: Configure systemd-resolved.                                          
   lineinfile:                                                                   
@@ -87,16 +90,29 @@
       - regexp: "^#?DNSSEC="                                            
         line: "DNSSEC=yes"                                        
       - regexp: "^#?Cache="                                                  
-        line: "Cache=yes"                                              
+        line: "Cache=yes"                              
       - regexp: "^#?DNSStubListener="                                             
-        line: "DNSStubListener={{ 'no' if public_dns_server else 'udp' }}"
-  notify: restart systemd-resolved                           
+        line: "DNSStubListener=no"
+  notify: stop systemd-resolved
+
+- name: Configure dhcpd.conf
+  lineinfile:
+    dest: /etc/dhcpd.conf
+    line: "nohook resolv.conf"
+    state: present
+
+- name: stop ufw
+  ufw:
+    state: disabled
+
+- name: flush iptables
+  command: iptables -F
 
 - name: Direct DNS requests to other servers to ours.
   iptables:
     table: nat
     chain: PREROUTING
-    destination: 127.0.0.1/32
+    destination: "! 127.0.0.1/32"
     protocol: "{{ item }}"
     match: "{{ item }}"
     destination_port: 53
@@ -105,6 +121,7 @@
   with_items:
     - "udp"
     - "tcp"
+  tags: iptables
 
 - name: Direct any application besides dnsmasq to use our server.
   iptables:
@@ -118,7 +135,40 @@
   with_items:
     - "udp"
     - "tcp"
-  tags: match
+  tags: iptables
+
+- name: Direct systemd-resolved to allow connecting to Tor's DNSPort.
+  iptables:
+    table: filter
+    chain: OUTPUT
+    protocol: "{{ item }}"
+    uid_owner: 1
+    destination: "!127.0.0.1"
+    destination_port: 53
+    jump: ACCEPT
+  with_items:
+    - "udp"
+    - "tcp"
+  tags: iptables
+
+#SYSTEMD_LOG_LEVEL=debug
+#sudo systemd-resolve --statistics
+#sudo systemd-resolve --flush-caches
+
+- name: Direct DNS requests to other servers to ours.
+  iptables:
+    table: nat
+    chain: OUTPUT
+    destination: 127.0.0.1/32
+    protocol: "{{ item }}"
+    match: "{{ item }}"
+    destination_port: 53
+    jump: DNAT
+    to_destination: 127.0.0.1
+  with_items:
+    - "udp"
+    - "tcp"
+  tags: iptables
 
 - name: Enable route_localnet and packet forwarding.
   sysctl:
@@ -136,7 +186,7 @@
     regexp: "^#DEFAULT_FORWARD_POLICY="
     line: "DEFAULT_FORWARD_POLICY=\"ACCEPT\""
     state: present
-  notify: reload ufw
+  notify: enable ufw
   when: "item.item == 'ufw' and item.rc == 0"
   with_items: "{{ stuff_installed.results }}"
 
@@ -149,7 +199,6 @@
   with_items:
     - udp
     - tcp
-  when: "public_dns_server"
-  notify: reload ufw
+  hen: "public_dns_server"
+  notify: enable ufw
   tags: ufw
-
