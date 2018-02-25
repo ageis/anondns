@@ -1,7 +1,7 @@
 ---
 public_dns_server: false
 nameserver_fallbacks: true
-pnssec_enabled: true
+dnssec_enabled: true
 dnssec_check_unsigned: false
 fallback_nameservers:
   - "9.9.9.9" # Quad9
