@@ -17,7 +17,7 @@ Examine potential of Unbound instead...
 
 Look for interfering services that could change nameserver away from 127.0.0.1. Check resolvonf for the symlink check, disable that (done).
 
-Look into [DNSCrypt](https://wiki.archlinux.org/index.php/DNSCrypt) plus [dnscrypt-proxy)[https://github.com/jedisct1/dnscrypt-proxy] to see if it's at all relevant.
+Look into [DNSCrypt](https://wiki.archlinux.org/index.php/DNSCrypt) plus [dnscrypt-proxy)(https://github.com/jedisct1/dnscrypt-proxy) to see if it's at all relevant.
 
 Other random links:
 
