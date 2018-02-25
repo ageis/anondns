@@ -4,15 +4,13 @@ This project's goal is to anonymize and encrypt DNS requests.  Automation code t
 
 In recent years, the world wide web has been making significant and impressive strides in HTTPS adoption. As part of this, Google's Chrome web browser will begin marking plain HTTP sites "insecure" in the user interface later this year. Likewise, Mozilla plans to require secure contexts for most features. The statistics since the advent of Let's Encrypt have been impressive.
 
-![][1]
-
-Source: Firefox Telemetry via [https://letsencrypt.org/stats/][2]
+![][1 Source: Firefox Telemetry via [https://letsencrypt.org/stats/][2]
 
 Still, one place where privacy has been significantly lacking is in DNS. Each time one makes a connection to a website, the client must first translate the hostname to an IPv4/6 address. It's an old protocol, first standardized by the IETF in 1983 and BIND came out a year later. SSL would not happen for another decade, which so to say that the Domain Name System was not not designed with security in mind. There's no encryption of DNS requests, although the results can be signed with DNSSEC to block tampering or poisoning. The goal of the project is to anonymize and encrypt one's DNS requests on their machine by leveraging [Tor](https://www.torproject.org] and its DNSPort feature, absolutely prohibiting leaks of requests to your ISP or other network adversaries, plus a locally-running DNS server such as dnsmasq to provide caching (avoiding slowness) and DNSSEC validation.
 
 It's presently geared to users of Debian GNU/Linux 9 (stretch). Currently this is just a set of Ansible roles and playbooks, but the long-term plan is a cross-platform program that runs as service and has an accompanying graphical configuration tool.
 
-At present, it can be configured to run locally or as a public Tor-based DNS server. Every time you make a DNS request, you could be getting your results from a random Tor exit node anywhere. Poisoning or spoofing is a risk; so the default configuration includes DNSSEC validation, and also prevents rebinding attacks and addresses from private IP space to be returned.
+In this alpha release, it can be configured to run locally or as a public Tor-based DNS server. Every time you make a DNS request, you could be getting your results from a random Tor exit node anywhere. Poisoning or spoofing is a risk; so the default configuration includes DNSSEC validation, and also prevents rebinding attacks and addresses from private IP space to be returned. Any process or user who is not dnsmasq will be redirected through Tor.
 
 Here's an overview of the playbooks:
 
@@ -42,10 +40,7 @@ dnssec_check_unsigned: false
 replace_torrc: true
 ```
 
-There's [RFC 7858](https://tools.ietf.org/html/rfc7858), a "Specification for DNS over Transport Layer Security (TLS)" and a related one, [RFC[8094](https://tools.ietf.org/html/rfc8094), which is "DNS over Datagram Transport Layer Security (DTLS)".
 
-
-[https://tools.ietf.org/html/rfc8094][3]
 
 ![][4]
 
