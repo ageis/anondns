@@ -24,7 +24,7 @@ Here's an overview of the playbooks:
 * tor-dns-server.yml: Sets up a full-fleged public Tor-based DNS server, with monitoring (explained below) and extra configuration provided by the "common" role.
 * monitoring.yml: Provides a monitoring framework for both Tor and dnsmasq, based on [Prometheus](https://prometheus.io) and [Grafana](https://grafana.com), with which you can collect metrics and build visualizations. You should have previously setup a valid DNS name or A record for the server in `hosts`. A [Let's Encrypt](https://letsencrypt.org) certificate will be generated.
 
-Please consult [NOTES_AND_TODO.md][] for what needs to be imeplemented and explored next.
+Please consult [NOTES_AND_TODO.md](NOTES_AND_TODO.md) for what needs to be imeplemented and explored next.
 
 ## Variables
 
