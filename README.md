@@ -63,41 +63,50 @@ Edit the hosts inventory at `hosts` and set the IP address for your server. It's
 Then you may execute the playbook at `tor-dns-server.yml`.
 
 <center>
-![][4] Source: [https://research.google.com/pubs/pub46197.html][5]
+![][4]
+
+Source: [https://research.google.com/pubs/pub46197.html][5]
 </center>
 
 <center>
 ![][6]
+
 Source: [https://research.google.com/pubs/pub46197.html][5]
 </center>
 
 <center>
 ![][7]
+
 Source: [https://research.google.com/pubs/pub46197.html][5]
 </center>
 
 <center>
 ![][8]
+
 Source: [https://research.google.com/pubs/pub46197.html][5]
 </center>
 
 <center>
 ![][9]
+
 Source: [https://research.google.com/pubs/pub46197.html][5]
 </center>
 
 <center>
 ![][4]
+
 Source: [https://research.google.com/pubs/pub46197.html][5]
 </center>
 
 <center>
 ![][10]
+
 Source: [https://research.google.com/pubs/pub46197.html][5]
 </center>
 
 <center>
 ![][11]
+
 Source: [https://scotthelme.co.uk/alexa-top-1-million-analysis-aug-2017/][12]
 </center>
 
@@ -113,6 +122,3 @@ Source: [https://scotthelme.co.uk/alexa-top-1-million-analysis-aug-2017/][12]
 [10]: https://img.cointel.pro/firefox_page_loads.png
 [11]: https://img.cointel.pro/https_adoption.png
 [12]: https://scotthelme.co.uk/alexa-top-1-million-analysis-aug-2017/
-
-
-
