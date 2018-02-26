@@ -2,7 +2,7 @@
 
 This project's goal is to anonymize and encrypt outgoing DNS requests. It currently consists of automation code to set up dnsmasq (either locally or public-facing) in combination with Tor which will anonymize all of your outgoing DNS requests. **This is not an official Tor project.**
 
-AnonDNS's target user base are those who are happy with trusting [the web PKI][21], running standard Firefox or Chrome with extensions like [HTTPS Eveywhere](https://www.eff.org/https-everywhere) (although the SNI header still leaks the domain name one is visiting), yet don't want to bother with the Tor Browser, and still would like their DNS lookup activity to be anonymized.
+AnonDNS's target user base are those who are willing to trust [the web PKI][21], running standard Firefox or Chrome with extensions like [HTTPS Eveywhere](https://www.eff.org/https-everywhere) (although the [SNI header][30] still leaks the domain name one is visiting), yet don't want to bother with the Tor Browser, and still would like their DNS lookup activity to be anonymized.
 
 In recent years, the world wide web has been making significant and impressive strides in HTTPS adoption. As part of this, Google's Chrome web browser will begin marking plain HTTP sites "insecure" in the user interface later this year. Likewise, Mozilla plans to require secure contexts for most features. The statistics since the advent of Let's Encrypt have been impressive.
 
@@ -113,6 +113,43 @@ Source: [https://research.google.com/pubs/pub46197.html][5]
 Source: [https://scotthelme.co.uk/alexa-top-1-million-analysis-aug-2017/][12]
 </sub></sup>
 
+# ⚠️Warnings
+
+Relying upon Tor for DNS results comes with risk. Exit nodes might be bad or malicious, poorly misconfigured, or have set their own dubious nameservers. Therefore, we've enabled options to prevent rebinding attacks and addresses in private IP from being returned. Also, this is where DNSSEC comes into play, and there are two options. 
+
+We may choose to proxy and trust the upstream server's validation of a DNSSEC signature, or we can do it ourselves. Since Tor could be regarded as a volatile and unpredictable network, we've configured the option to validate DNSSEC-signed records against the root trust anchors.
+
+DNSSEC deployment progress has been remarkable, although DANE lags behind. As of this writing, there are 1544 TLDs in the root zone in total. 1407 TLDs are signed, and 1399 TLDs have trust anchors published as DS records in the root zone. 
+
+![Global DNSSEC deployment][26]
+<sub><sup>
+Source: [http://secspider.verisignlabs.com/growth.html][31]
+</sub></sup>
+
+![Global DNSSEC deployment][28]
+<sub><sup>
+Source: [https://stats.labs.apnic.net/dnssec][32]
+</sub></sup>
+
+However, the problem is that client resolvers are not validating.[¹][25] Although we have a 90% DNSSEC-enabled internet, approximately 12% of users are validating.
+
+![Percentage of client resolvers validating][27]
+<sub><sup>
+Source: [http://rick.eng.br/dnssecstat][12]
+</sub></sup>
+
+So, we have chosen to verify DNSSEC-signed zones against the root trust anchors. With strict ordering of upstream nameservers enabled, an insecure or an invalid result should mean the query is forwarded to the next server in the chain, until the result is valid, and it will be cached. We've also adjusted Tor's configuration so that circuits are changed more frequently, in order to grasp at a wider variety of sources for zone information. 
+
+The following graph shows that DNSSEC rates are higher in Scandinavian countries than the United States. Setting [ExitNodes](https://www.torproject.org/docs/tor-manual.html.en#ExitNodes) to some country codes, which is usually inadvisable, could be helpful in this instance.
+
+Generally, I have been running this on my machine for weeks and encountered no problems. 
+
+![DNSSEC validation rate by country][29]
+<sub><sup>
+Source: [https://stats.labs.apnic.net/dnssec][32]
+</sub></sup>
+
+
 [1]: https://img.cointel.pro/firefox_telemetry.png
 [2]: https://img.cointel.pro/letsencrypt_stats.png
 [3]: https://tools.ietf.org/html/rfc8094
@@ -138,3 +175,12 @@ Source: [https://scotthelme.co.uk/alexa-top-1-million-analysis-aug-2017/][12]
 [22]: https://tools.ietf.org/html/rfc6698
 [23]: https://tools.ietf.org/html/rfc7218
 [24]: https://tools.ietf.org/html/rfc7671
+[25]: http://stats.research.icann.org/dns/tld_report/
+[26]: https://img.cointel.pro/dnssec_growth.png
+[27]: https://img.cointel.pro/dnssec_validating.png
+[28]: https://img.cointel.pro/dnssec_global.png
+[29]: https://img.cointel.pro/dnssec_by_country.png
+[30]: https://https.cio.gov/sni/
+[31]: http://secspider.verisignlabs.com/growth.html
+[32]: https://stats.labs.apnic.net/dnssec
+[33]: http://rick.eng.br/dnssecstat/
