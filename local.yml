@@ -4,4 +4,4 @@
   become: yes
   roles:
     - role: anondns
-      role: anondns
+      tags: anondns
