@@ -19,7 +19,7 @@ It's presently geared to users of Debian GNU/Linux 9 (stretch). Currently this i
 
 In this alpha release, it can be configured to run locally or as a public Tor-based DNS server. Every time you make a DNS request, you could be getting your results from a random Tor exit node anywhere. Poisoning or spoofing is a risk; so the default configuration includes DNSSEC validation, and also prevents rebinding attacks and addresses from private IP space to be returned. Any process or user who is not dnsmasq will be redirected through Tor.
 
-Please consult [NOTES_AND_TODO.md](NOTES_AND_TODO.md) for what needs to be imeplemented and explored next.
+Please consult [NOTES_AND_TODO.md](NOTES_AND_TODO.md) for what needs to be imeplemented and explored next. There are several challenges to making this compatible with other platforms using conditional logic, benchmarking to be performed, plus the whole build system, installer and configuration UI and service setup to be addressed.
 
 Here's an overview of the playbooks:
 
@@ -131,18 +131,18 @@ Source: [http://secspider.verisignlabs.com/growth.html][31]
 Source: [https://stats.labs.apnic.net/dnssec][32]
 </sub></sup>
 
-However, the problem is that client resolvers are not validating.[¹][25] Although we have a 90% DNSSEC-enabled internet, approximately 12% of users are validating.
+However, the problem is that client resolvers are not validating.[¹][25] Although we have an approximately 90% DNSSEC-enabled internet, only a meagre 12% of users are validating.
 
 ![Percentage of client resolvers validating][27]
 <sub><sup>
 Source: [http://rick.eng.br/dnssecstat][12]
 </sub></sup>
 
-So, we have chosen to verify DNSSEC-signed zones against the root trust anchors. With strict ordering of upstream nameservers enabled, an insecure or an invalid result should mean the query is forwarded to the next server in the chain, until the result is valid, and it will be cached. We've also adjusted Tor's configuration so that circuits are changed more frequently, in order to grasp at a wider variety of sources for zone information. 
+With strict ordering of upstream nameservers enabled, an insecure or an invalid result should mean the query is forwarded to the next server in the chain, until the result is valid, and it will be cached. We've also adjusted Tor's configuration so that circuits are changed more frequently, in order to grasp at a wider variety of sources for zone information.
 
-The following graph shows that DNSSEC rates are higher in Scandinavian countries than the United States. Setting [ExitNodes](https://www.torproject.org/docs/tor-manual.html.en#ExitNodes) to some country codes, which is usually inadvisable, could be helpful in this instance.
+The following graph shows that validation rates are higher in Scandinavian countries than, for insance, the United States. Hypothetically, setting [ExitNodes](https://www.torproject.org/docs/tor-manual.html.en#ExitNodes) in `torrc` to some specific country codes, which is usually inadvisable, might be helpful in this instance.
 
-Generally, I have been running this on my machine for weeks and encountered no problems. 
+But in general, I have been running this name resolution scheme on my Linux desktop for weeks and encountered no problems at all.
 
 ![DNSSEC validation rate by country][29]
 <sub><sup>
