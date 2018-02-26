@@ -2,6 +2,8 @@
 
 This project's goal is to anonymize and encrypt DNS requests. It currently consists of automation code to set up dnsmasq (either locally or public-facing) in combination with Tor which will anonymize all of your outgoing DNS requests. **This is not an official Tor project.**
 
+AnonDNS's target user base are those who are happy with running Firefox or Chrome with extensions like [HTTPS Eveywhere](https://www.eff.org/https-everywhere) (although the SNI header still leaks the domain name one is visiting), don't want to bother with the Tor Browser, yet still would like their DNS lookup activity to be anonymized.
+
 In recent years, the world wide web has been making significant and impressive strides in HTTPS adoption. As part of this, Google's Chrome web browser will begin marking plain HTTP sites "insecure" in the user interface later this year. Likewise, Mozilla plans to require secure contexts for most features. The statistics since the advent of Let's Encrypt have been impressive.
 
 ![Let's Encrypt statistics][2]
