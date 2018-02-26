@@ -4,13 +4,12 @@ This project's goal is to anonymize and encrypt DNS requests.  Automation code t
 
 In recent years, the world wide web has been making significant and impressive strides in HTTPS adoption. As part of this, Google's Chrome web browser will begin marking plain HTTP sites "insecure" in the user interface later this year. Likewise, Mozilla plans to require secure contexts for most features. The statistics since the advent of Let's Encrypt have been impressive.
 
-<div style="text-align: center">
-![][2]
 
+![][2]
 <sub><sup>
 Source: [Let's Encrypt][13]
 </sub></sup>
-</div>
+
 
 Still, one place where privacy has been significantly lacking is in DNS. Each time one makes a connection to a website, the client must first translate the hostname to an IPv4/6 address. It's an old protocol, first standardized by the IETF in 1983 and BIND came out a year later. SSL would not happen for another decade, which so to say that the Domain Name System was not not designed with security in mind. There's no encryption of DNS requests, although the results can be signed with DNSSEC to block tampering or poisoning. The goal of the project is to anonymize and encrypt one's DNS requests on their machine by leveraging [Tor](https://www.torproject.org) and its DNSPort feature, absolutely prohibiting leaks of requests to your ISP or other network adversaries, plus a locally-running DNS server such as dnsmasq to provide caching (avoiding slowness) and DNSSEC validation.
 
