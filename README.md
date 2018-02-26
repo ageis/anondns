@@ -142,7 +142,7 @@ Source: [http://rick.eng.br/dnssecstat][12]
 
 With strict ordering of upstream nameservers enabled, an insecure or an invalid result should mean the query is forwarded to the next server in the chain, until the result is valid, and it will be cached. We've also adjusted Tor's configuration so that circuits are changed more frequently, in order to grasp at a wider variety of sources for zone information.
 
-The following graph shows that validation rates are higher in Scandinavian countries than, for insance, the United States. Hypothetically, setting [ExitNodes](https://www.torproject.org/docs/tor-manual.html.en#ExitNodes) in `torrc` to some specific country codes, which is usually inadvisable, might be helpful in this instance.
+The following graph shows that validation rates are higher in Scandinavian countries than, for instance, the United States. Hypothetically, setting [ExitNodes](https://www.torproject.org/docs/tor-manual.html.en#ExitNodes) in `torrc` to some specific country codes, which is usually inadvisable, might be helpful in this instance.
 
 But in general, I have been running this name resolution scheme on my Linux desktop for weeks and encountered no problems at all.
 
