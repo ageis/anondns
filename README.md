@@ -11,7 +11,7 @@ Source: [Let's Encrypt][13]
 </sub></sup>
 
 
-Still, one place where privacy has been significantly lacking is in DNS. Each time one makes a connection to a website, the client must first translate the hostname to an IPv4/6 address. It's an old protocol, first standardized by the IETF in 1983 and [BIND][16] came out a year later. SSL would not happen for another decade, which so to say that the Domain Name System was not not designed with security in mind. There's no encryption of DNS requests, although the results can be signed with DNSSEC to block tampering or poisoning. This subject has been explored previously, as in IETF papers titled [Pretty Bad Privacy: Pitfalls of DNS Encryption][14] and [Encrypted DNS: An opportunistic encryption protocol extension for DNS][15].
+Still, one place where privacy has been significantly lacking is in DNS. Each time one makes a connection to a website, the client must first translate the hostname to an IPv4/6 address. It's an old protocol, first standardized by the IETF in 1983 and [BIND][16] came out a year later. SSL would not happen for another decade, which so to say that the Domain Name System was not not designed with security in mind. There's no encryption of DNS requests, although the results can be signed with [DNSSEC][18] to block tampering or poisoning. This subject has been explored previously, as in IETF papers titled [Pretty Bad Privacy: Pitfalls of DNS Encryption][14] and [Encrypted DNS: An opportunistic encryption protocol extension for DNS][15]. Google, operating the most popular and public resolvers, has information about [DNS-over-HTTPS][17].
 
 The goal of the project is to anonymize and encrypt one's DNS requests on their machine by leveraging [Tor](https://www.torproject.org) and its [DNSPort](https://www.torproject.org/docs/tor-manual.html.en#DNSPort) feature, absolutely prohibiting leaks of requests to your ISP or other network adversaries with [iptables](http://www.netfilter.org/projects/iptables/index.html), plus a locally-running DNS server such as [dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html) to provide caching (avoiding slowness) and DNSSEC validation.
 
@@ -127,3 +127,5 @@ Source: [https://scotthelme.co.uk/alexa-top-1-million-analysis-aug-2017/][12]
 [14]: https://www.ietf.org/mail-archive/web/dns-privacy/current/pdfWqAIUmEl47.pdf
 [15]: https://www.ietf.org/mail-archive/web/dns-privacy/current/pdfWjIXeAM9so.pdf
 [16]: https://www.isc.org/downloads/bind/
+[17]: https://developers.google.com/speed/public-dns/docs/dns-over-https
+[18]: http://www.dnssec.net
