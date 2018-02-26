@@ -74,18 +74,18 @@ Source: [https://research.google.com/pubs/pub46197.html][5]
 
 Source: [https://scotthelme.co.uk/alexa-top-1-million-analysis-aug-2017/][12]
 
-[1]: https://cdn-images-1.medium.com/max/1600/1*4Ks0_NtnfjyY8N-FZyYZbg.png
-[2]: https://medium.com/r/?url=https%3A%2F%2Fletsencrypt.org%2Fstats%2F
-[3]: https://medium.com/r/?url=https%3A%2F%2Ftools.ietf.org%2Fhtml%2Frfc8094
-[4]: https://cdn-images-1.medium.com/max/1600/1*DZCItCe-KvAU3N7m_aPLhw.png
-[5]: https://medium.com/r/?url=https%3A%2F%2Fresearch.google.com%2Fpubs%2Fpub46197.html
-[6]: https://cdn-images-1.medium.com/max/1600/1*fzPhekhQ4ZvnQMQJsiQrog.png
-[7]: https://cdn-images-1.medium.com/max/1600/1*ai9k7A9oJhmWEhzYNqDJ1Q.png
-[8]: https://cdn-images-1.medium.com/max/1600/1*CDkiZVQ2xef5XnWF5yB_Ow.png
-[9]: https://cdn-images-1.medium.com/max/1600/1*CLqbuJkkC2K9XVNvnZElSg.png
-[10]: https://cdn-images-1.medium.com/max/1600/1*cXgB3Rowq8lBw3snhqvhGQ.png
-[11]: https://cdn-images-1.medium.com/max/1600/1*J9yrgW4CCh3iOT8Kh9pSZA.png
-[12]: https://medium.com/r/?url=https%3A%2F%2Fscotthelme.co.uk%2Falexa-top-1-million-analysis-aug-2017%2F
+[1]: https://img.cointel.pro/firefox_telemetry.png
+[2]: https://img.cointel.pro/letsencrypt_stats.html
+[3]: https://tools.ietf.org/html/rfc8094
+[4]: https://img.cointel.pro/chrome_stats.png
+[5]: https://research.google.com/pubs/pub46197.html
+[6]: https://img.cointel.pro/https_stats.png
+[7]: https://img.cointel.pro/alexa_stats.png
+[8]: https://img.cointel.pro/https_support.png
+[9]: https://img.cointel.pro/https_support_2.png
+[10]: https://img.cointel.pro/firefox_page_loads.png
+[11]: https://img.cointel.pro/https_adoption.png
+[12]: https://scotthelme.co.uk/alexa-top-1-million-analysis-aug-2017/
 
 Getting started
 ---------------
