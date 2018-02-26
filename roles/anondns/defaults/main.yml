@@ -1,5 +1,5 @@
 ---
-public_dns_server: false
+public_dns_server: true
 nameserver_fallbacks: true
 dnssec_enabled: true
 dnssec_check_unsigned: false

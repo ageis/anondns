@@ -1,5 +1,7 @@
-Notes and todo
----
+Notes and to-do
+---------------
+
+Make iptables rules save and persist/restore on boot.
 
 Make the UI and choose UI framework.
 
