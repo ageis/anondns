@@ -26,7 +26,7 @@
     name: network-manager
     state: restarted
 
-  - name: restart tor
+- name: restart tor
   service:
     name: tor
     state: restarted
