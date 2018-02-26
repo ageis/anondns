@@ -19,6 +19,8 @@ Look for more interfering services that could change nameserver away from 127.0.
 
 Look into [DNSCrypt](https://dnscrypt.info) plus [dnscrypt-proxy](https://github.com/jedisct1/dnscrypt-proxy) to see if it's at all relevant.
 
+Decide whether wueries to upstream fallback servers should still be proxied through Tor.
+
 Other random links:
 
 - http://mayakron.altervista.org/wikibase/show.php?id=AcrylicFAQ
