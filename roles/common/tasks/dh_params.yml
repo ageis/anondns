@@ -1,0 +1,41 @@
+---
+- include_vars: "{{ role_path }}/../../vars/dh_params.yml"
+
+- name: Install Diffie-Hellman Parameters.
+  copy:
+    content: "{{ item.content }}"
+    dest: /etc/ssl/dhparam.pem
+    owner: root
+    group: ssl-cert
+    mode: "0644"
+  when: "item.name == 'dhparam4096.pem'"
+  with_items: 
+    - "{{ dh_params['4096_bit'] }}"
+  tags: dh
+
+  - name: Dowload sha256sum of certificate bundle.
+    get_url:
+      url: https://curl.haxx.se/ca/cacert.pem.sha256
+      dest: /tmp/cacert.pem.sha256
+      mode: 0777
+
+  - name: Register sha256sum of certificate bundle into a base64-encoded variable.
+    slurp:
+      src: /tmp/cacert.pem.sha256
+    register: cacert_sha256sum
+
+  - name: Download Mozilla's CA certificate store.
+    get_url:
+      url: https://curl.haxx.se/ca/cacert.pem
+      dest: /etc/foo.conf
+      checksum: "{{ cacert_sha256sum['content'] | b64decode }}"
+      mode: 0640
+
+  - name: Update copy of Mozilla's CA certificate store.
+    cron: 
+      name: "update CA certificate store"
+      special_time: monthly
+      job: "/usr/bin/wget -q https://curl.haxx.se/ca/cacert.pem -O /etc/ssl/cacert.pem"
+      state: present
+
+    

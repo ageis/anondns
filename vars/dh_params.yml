@@ -1,0 +1,45 @@
+---
+dh_params:
+  4096_bit:
+    - name: 'dhparam4096.pem'
+      content: |
+          -----BEGIN DH PARAMETERS-----
+          MIICCAKCAgEAuSTlzm6UB+GBnIf7zPutvqi5W7orrgxe5qwWEUekaHeV7H1C4SOW
+          S1ZiRlGOvSVoqYWIFx8etcVR7hIiVjEWfizhOKfGcPhosrfZemigZbeW8+Xr9VN3
+          Q70iYeMpgYBVJDddskUynsuo43Dr98bX7uQeh1zIQHUN/gh2djdzEAeleYPDpQB/
+          ocFYCp3AAjiy/fI8CwFGbyAcL15L9qwytJAwtAaJklhqXu9/+0dAfTGxlTNfUyma
+          hsEgDVQQjhLrTidv9xA+fe9J04qHXkFL8aqL68wR1865ZqbL2nA7MwdNHRsKmhFN
+          hZvxO71R9E8ocYi7qtdWl5Xxo6x9hMmDSGMOovGoAEvKg7SOWKb/i1SuM3hlhGaO
+          vewpATllUl8vlbBR2M/0W2rhC5EHZ46pF6K0yMX9mGmsWJHdk/t795+vZykjgnj0
+          c6fUUvvIEWuoN6glANifNt0wbWlycXT0+fgTASxmCFmnR3I45cdIYex8W48hBmXP
+          pUXJEsspITh75v21QIpB19+m6xlQ/fWIV+ml5+HVzJyi+NC89trcjAH3r4EfvWQ1
+          gjvHRCzP8tKAvsDgUlw7U3ctlBnBDIOrwX5chPlVFMgJqHDSKrv736oTZYKiHA3z
+          4vkHkudS05OUPnqzsEOt3J+EnHf1ZeT/l3257QJuZ4HiVtUo+H1aZUMCAQI=
+          -----END DH PARAMETERS-----
+
+  3072_bit:
+    - name: 'dhparam3072.pem'
+      content: |
+          -----BEGIN DH PARAMETERS-----
+          MIIBiAKCAYEAneM2+1sFfyxEur7Ii9Sxuts2nlwuxJiNWeYpwwoHc8faNVARoF6U
+          Ful20fcVDVYIr0kxfgF8+nrYgrm7jgt5yj4Fv1LKAOIUEGdYXkRZe7pKHXkeXgXI
+          Og7rlFJ23MqIhysV10e72+oELVvcZGhc8A00rEt6QPie7BmqeEvOC09ueM6ysK8O
+          i3MaTwMddv6UyWEv806nD9BBozWtlY/3VKzI5H/32wLeUHmYNFSRWvAI1vHRpQWb
+          XxHN/k7I43VEticETg004zvi0Ux+S5424RPHqkMLn1pEfdG3dNYboYAanZu6+JZk
+          zEDzW7/l+OZGe6IWeCxf28Wf9h6hHw72oje+LYJxrkg4V0TJfGtD0TCsNOZVsoO6
+          Bfk1jvRY3qjRhGdJfzo1Q1ou+cQrIG9ZhiaZOb2VtT79Qlwk/plE2himyfIS92zi
+          gzFVaJAlHrc1ap3grU6Tn+s4ki49vir/Qwk4y7HmQNNdHJQrBFvwS076rntBLRvZ
+          Xu/WMQlXratrAgEC
+          -----END DH PARAMETERS-----
+
+  2048_bit:
+    - name: 'dhparam2048.pem'
+      content: |
+          -----BEGIN DH PARAMETERS-----
+          MIIBCAKCAQEAs7Y6geJw5SIEv0C53AVwADR1a3GhsxzD7EzPWp14Ff0rXGNu6Bu+
+          wkSPkfIyGW3amJ3Q8b85PGqZbgYu1S6FdGjdupoEs4oulsjNkmFe3Gl2afyVZZx6
+          QUXQxdWQ1sJWw80w2EpOaG12G+LHYLnO3pJdHk31m/4oWsnNwEZ8ygAJ8FNFBRjq
+          +apVbo0RHEJNV6rKw+bLNo1Quplx90wRa4HlYamUqiprXz+AL9D6Dod7TVTNe53H
+          aE1Rc+H0e0/j0pTUSLHLae7Zp/KztE8kXHm5QsgynGXDRPG4jZHeeV08C+vdk/pH
+          fHDBfI+geoQ40E5kI5dSY1xt9fVh8XzxAwIBAg==
+          -----END DH PARAMETERS-----

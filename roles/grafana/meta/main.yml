@@ -4,7 +4,7 @@ galaxy_info:
   description: Installs Grafana to provide visual metric analytics and dashboards for Prometheus.
   company: Calyx Institute
   license: MIT
-  min_ansible_version: 2.4.2
+  min_ansible_version: 2.4.3
   platforms:
     - name: Debian
       versions:

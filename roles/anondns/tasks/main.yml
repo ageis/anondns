@@ -66,7 +66,6 @@
   when: "item.item == 'resolvconf' and item.rc == 0"
   with_items: "{{ stuff_installed.results }}"
  
- 
 - name: Set resolvconf to aovid complaining about absence of a symlink, and to truncate nameservers after loopback.
   lineinfile:
     dest: /etc/default/resolvconf
@@ -184,7 +183,7 @@
     - "tcp"
   tags: iptables
 
-- name: Enable route_localnet and packet forwarding.
+- name: Enable route_localnet and IPv4 packet forwarding.
   sysctl:
     name: "{{ item }}"
     value: 1

@@ -1,5 +1,5 @@
 ---
-grafana_server_name: 'tordns.party'
+grafana_server_name: '{{ inventory_hostname }}'
 grafana_updates_check: false
 grafana_disable_gravatar: true
 grafana_allow_sign_up: false
@@ -9,4 +9,4 @@ grafana_auto_assign_org_role: 'Viewer'
 grafana_default_theme: 'dark'
 grafana_disable_login_form: false
 grafana_anonymous_auth: true
-grafana_org_name: 'tordns-party'
+grafana_org_name: 'AnonDNS'

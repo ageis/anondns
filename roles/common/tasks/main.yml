@@ -8,6 +8,9 @@
 - include: make_swap.yml
   tags: swap
 
+- include: dh_params.yml
+  tags: dhparams
+
 - include: coredumps.yml
   tags: coredumps
 

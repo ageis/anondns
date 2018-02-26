@@ -4,12 +4,10 @@ This project's goal is to anonymize and encrypt DNS requests. It currently consi
 
 In recent years, the world wide web has been making significant and impressive strides in HTTPS adoption. As part of this, Google's Chrome web browser will begin marking plain HTTP sites "insecure" in the user interface later this year. Likewise, Mozilla plans to require secure contexts for most features. The statistics since the advent of Let's Encrypt have been impressive.
 
-
-![][2]
+![Let's Encrypt statistics][2]
 <sub><sup>
 Source: [Let's Encrypt][13]
 </sub></sup>
-
 
 Still, one place where privacy has been significantly lacking is in DNS. Each time one makes a connection to a website, the client must first translate the hostname to an IPv4/6 address. It's an old protocol, first standardized by the IETF in 1983 and [BIND][16] came out a year later. SSL would not happen for another decade, which so to say that the Domain Name System was not not designed with security in mind. There's no encryption of DNS requests, although the results can be signed with [DNSSEC][18] to block tampering or poisoning. This subject has been explored previously, as in IETF papers titled [Pretty Bad Privacy: Pitfalls of DNS Encryption][14] and [Encrypted DNS: An opportunistic encryption protocol extension for DNS][15]. Google, who operates the most popular public open resolvers, provides information about [DNS-over-HTTPS][17].
 
@@ -19,14 +17,14 @@ It's presently geared to users of Debian GNU/Linux 9 (stretch). Currently this i
 
 In this alpha release, it can be configured to run locally or as a public Tor-based DNS server. Every time you make a DNS request, you could be getting your results from a random Tor exit node anywhere. Poisoning or spoofing is a risk; so the default configuration includes DNSSEC validation, and also prevents rebinding attacks and addresses from private IP space to be returned. Any process or user who is not dnsmasq will be redirected through Tor.
 
+Please consult [NOTES_AND_TODO.md](NOTES_AND_TODO.md) for what needs to be imeplemented and explored next.
+
 Here's an overview of the playbooks:
 
 * local.yml: Run ansible-playbook --connection=local --limit localhost in order to activate AnonDNS on your machine.
 * security.yml: Provides OS and SSH hardening of the target machine. Requires you to run `ansible-galaxy install --force --ignore-errors -r requirements.yml` in order to obtain the security-related dependencies from [dev-sec.io](http://dev-sec.io)
 * tor-dns-server.yml: Sets up a full-fleged public Tor-based DNS server, with monitoring (explained below) and extra configuration provided by the "common" role.
 * monitoring.yml: Provides a monitoring framework for both Tor and dnsmasq, based on [Prometheus](https://prometheus.io) and [Grafana](https://grafana.com), with which you can collect metrics and build visualizations. You should have previously setup a valid DNS name or A record for the server in `hosts`. A [Let's Encrypt](https://letsencrypt.org) certificate will be generated.
-
-Please consult [NOTES_AND_TODO.md](NOTES_AND_TODO.md) for what needs to be imeplemented and explored next.
 
 ## Variables
 
@@ -47,10 +45,12 @@ dnssec_check_unsigned: false
 
 # Replace your system-wide Tor configuration with our own. Otherwise, we'll only set the options needed to make AnonDNS work.
 replace_torrc: true
+
+# The name of your regular unprivileged system user.
+anondns_user: ''
 ```
 
-Getting started
----------------
+## Getting started
 
 The configuration management is done with [Ansible](https://www.ansible.com/), which may be obtained via Python's [pip](https://bootstrap.pypa.io/get-pip.py).
 
@@ -58,7 +58,7 @@ We use Debian GNU/Linux (currently stretch or 9.x) for everything. Don't try run
 
 All commands documented here are expected to be executed from root of this repository. Here's what one needs to have installed:
 
-```
+```bash
 sudo pip install -U ansible
 ```
 
@@ -66,47 +66,45 @@ We recommend Ansible 2.4.3 or later.
 
 In order to update the security-related dependencies for hardening base operating system and SSH daemon:
 
-
 Edit the hosts inventory at `hosts` and set the IP address for your server. It's ideal to have some DNS subdomains pointing to that same server.
 
 Then you may execute the playbook at `tor-dns-server.yml`.
 
-![][4]
+![Chrome HTTPS statistics][4]
 <sub><sup>
 Source: [https://research.google.com/pubs/pub46197.html][5]
 </sub></sup>
 
-![][6]
+![HTTPS statistics][6]
 <sub><sup>
 Source: [https://research.google.com/pubs/pub46197.html][5]
 </sub></sup>
 
-![][7]
+![Alexa statistics][7]
 <sub><sup>
 Source: [https://research.google.com/pubs/pub46197.html][5]
 </sub></sup>
 
-![][8]
+![HTTPS support][8]
 <sub><sup>
 Source: [https://research.google.com/pubs/pub46197.html][5]
 </sub></sup>
 
-![][9]
+![HTTPS support][9]
 <sub><sup>
 Source: [https://research.google.com/pubs/pub46197.html][5]
 </sub></sup>
 
-![][4]
+![Chrome statistics][4]
 <sub><sup>
 Source: [https://research.google.com/pubs/pub46197.html][5]
 
-
-![][10]
+![Firefox HTTPS page loads][10]
 <sub><sup>
 Source: [https://research.google.com/pubs/pub46197.html][5]
 </sub></sup>
 
-![][11]
+![HTTPS adoption in Alexa's top million websites][11]
 <sub><sup>
 Source: [https://scotthelme.co.uk/alexa-top-1-million-analysis-aug-2017/][12]
 </sub></sup>
