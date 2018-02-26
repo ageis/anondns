@@ -21,6 +21,9 @@ Look into [DNSCrypt](https://dnscrypt.info) plus [dnscrypt-proxy](https://github
 
 Decide whether wueries to upstream fallback servers should still be proxied through Tor.
 
+Testing and benchmarks: resolve massive numbers of domains with [massdns](https://github.com/quirins/massdns)!
+
+
 Other random links:
 
 - http://mayakron.altervista.org/wikibase/show.php?id=AcrylicFAQ
