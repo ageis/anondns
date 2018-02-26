@@ -186,4 +186,4 @@ Source: [https://stats.labs.apnic.net/dnssec][32]
 [31]: http://secspider.verisignlabs.com/growth.html
 [32]: https://stats.labs.apnic.net/dnssec
 [33]: http://rick.eng.br/dnssecstat/
-[34 =1280x720]: https://img.cointel.pro/anondns.gif
+[34]: https://img.cointel.pro/anondns.gif
