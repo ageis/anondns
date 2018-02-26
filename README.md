@@ -62,53 +62,57 @@ Edit the hosts inventory at `hosts` and set the IP address for your server. It's
 
 Then you may execute the playbook at `tor-dns-server.yml`.
 
-
 <center>
-![Source: https://research.google.com/pubs/pub46197.html](https://img.cointel.pro/chrome_stats.png)
-</center>
-
+![][4] Source: [https://research.google.com/pubs/pub46197.html][5]
 </center>
 
 <center>
-![Source: https://research.google.com/pubs/pub46197.html][https://img.cointel.pro/https_stats.png]
+![][6]
+Source: [https://research.google.com/pubs/pub46197.html][5]
 </center>
 
 <center>
-![Source: https://research.google.com/pubs/pub46197.html][https://research.google.com/pubs/pub46197.html]
-</center>
-
 ![][7]
+Source: [https://research.google.com/pubs/pub46197.html][5]
+</center>
 
- ![Source: https://research.google.com/pubs/pub46197.html][5]
-
+<center>
 ![][8]
-
 Source: [https://research.google.com/pubs/pub46197.html][5]
+</center>
 
+<center>
 ![][9]
-
 Source: [https://research.google.com/pubs/pub46197.html][5]
+</center>
 
+<center>
 ![][4]
-
 Source: [https://research.google.com/pubs/pub46197.html][5]
+</center>
 
+<center>
 ![][10]
-
 Source: [https://research.google.com/pubs/pub46197.html][5]
+</center>
 
+<center>
 ![][11]
-
 Source: [https://scotthelme.co.uk/alexa-top-1-million-analysis-aug-2017/][12]
 </center>
 
 [1]: https://img.cointel.pro/firefox_telemetry.png
 [2]: https://img.cointel.pro/letsencrypt_stats.png
-[5]: 
-[6]: 
+[3]: https://tools.ietf.org/html/rfc8094
+[4]: https://img.cointel.pro/chrome_stats.png
+[5]: https://research.google.com/pubs/pub46197.html
+[6]: https://img.cointel.pro/https_stats.png
 [7]: https://img.cointel.pro/alexa_stats.png
 [8]: https://img.cointel.pro/https_support.png
 [9]: https://img.cointel.pro/https_support_2.png
 [10]: https://img.cointel.pro/firefox_page_loads.png
 [11]: https://img.cointel.pro/https_adoption.png
 [12]: https://scotthelme.co.uk/alexa-top-1-million-analysis-aug-2017/
+
+
+
