@@ -1,5 +1,7 @@
 # AnonDNS: encrypting and anonymizing all your DNS requests with Tor (WORK IN PROGRESS)
 
+![AnonDNS][34]
+
 This project's goal is to anonymize and encrypt outgoing DNS requests. It currently consists of automation code to set up dnsmasq (either locally or public-facing) in combination with Tor which will anonymize all of your outgoing DNS requests. **This is not an official Tor project.**
 
 AnonDNS's target user base are those who are willing to trust [the web PKI][21], running standard Firefox or Chrome with extensions like [HTTPS Eveywhere](https://www.eff.org/https-everywhere) (although the [SNI header][30] still leaks the domain name one is visiting), yet don't want to bother with the Tor Browser, and still would like their DNS lookup activity to be anonymized.
@@ -184,3 +186,4 @@ Source: [https://stats.labs.apnic.net/dnssec][32]
 [31]: http://secspider.verisignlabs.com/growth.html
 [32]: https://stats.labs.apnic.net/dnssec
 [33]: http://rick.eng.br/dnssecstat/
+[34]: https://img.cointel.pro/anondns.gif
