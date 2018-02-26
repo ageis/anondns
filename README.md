@@ -1,6 +1,6 @@
 # AnonDNS: encrypting and anonymizing all your DNS requests with Tor (WORK IN PROGRESS)
 
-![AnonDNS][34]
+![AnonDNS][34 =1280x720]
 
 This project's goal is to anonymize and encrypt outgoing DNS requests. It currently consists of automation code to set up dnsmasq (either locally or public-facing) in combination with Tor which will anonymize all of your outgoing DNS requests. **This is not an official Tor project.**
 
