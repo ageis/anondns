@@ -70,6 +70,8 @@ Edit the hosts inventory at `hosts` and set the IP address for your server. It's
 
 Then you may execute the playbook at `tor-dns-server.yml`.
 
+# HTTPS adoption succeeds while most of the Domain Name System remain plaintext
+
 ![Chrome HTTPS statistics][4]
 <sub><sup>
 Source: [https://research.google.com/pubs/pub46197.html][5]
