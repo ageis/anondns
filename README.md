@@ -64,17 +64,22 @@ Then you may execute the playbook at `tor-dns-server.yml`.
 
 
 <center>
-![][4]
+![Source: https://research.google.com/pubs/pub46197.html](https://img.cointel.pro/chrome_stats.png)
+</center>
 
-Source: [https://research.google.com/pubs/pub46197.html][5]
+</center>
 
-![][6]
+<center>
+![Source: https://research.google.com/pubs/pub46197.html][https://img.cointel.pro/https_stats.png]
+</center>
 
-Source: [https://research.google.com/pubs/pub46197.html][5]
+<center>
+![Source: https://research.google.com/pubs/pub46197.html][https://research.google.com/pubs/pub46197.html]
+</center>
 
 ![][7]
 
-Source: [https://research.google.com/pubs/pub46197.html][5]
+ ![Source: https://research.google.com/pubs/pub46197.html][5]
 
 ![][8]
 
@@ -99,9 +104,8 @@ Source: [https://scotthelme.co.uk/alexa-top-1-million-analysis-aug-2017/][12]
 
 [1]: https://img.cointel.pro/firefox_telemetry.png
 [2]: https://img.cointel.pro/letsencrypt_stats.png
-[4]: https://img.cointel.pro/chrome_stats.png
-[5]: https://research.google.com/pubs/pub46197.html
-[6]: https://img.cointel.pro/https_stats.png
+[5]: 
+[6]: 
 [7]: https://img.cointel.pro/alexa_stats.png
 [8]: https://img.cointel.pro/https_support.png
 [9]: https://img.cointel.pro/https_support_2.png
