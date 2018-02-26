@@ -70,7 +70,7 @@
   lineinfile:
     dest: /etc/default/resolvconf
     regexp: "{{ item.regexp }}"
-    line: "{{ item;ine }}"
+    line: "{{ item.line }}"
     state: present
     create: yes
   with_items:

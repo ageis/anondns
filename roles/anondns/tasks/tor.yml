@@ -7,7 +7,7 @@
 - name: Install Tor Project apt repository.
   apt_repository:
     repo: "deb http://deb.torproject.org/torproject.org/ stretch main"
-    filename: torproject
+    filename: 'torproject'
     state: present
 
 - name: Install Tor.
