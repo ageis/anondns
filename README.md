@@ -11,7 +11,7 @@ Source: [Let's Encrypt][13]
 </sub></sup>
 
 
-Still, one place where privacy has been significantly lacking is in DNS. Each time one makes a connection to a website, the client must first translate the hostname to an IPv4/6 address. It's an old protocol, first standardized by the IETF in 1983 and BIND came out a year later. SSL would not happen for another decade, which so to say that the Domain Name System was not not designed with security in mind. There's no encryption of DNS requests, although the results can be signed with DNSSEC to block tampering or poisoning. The goal of the project is to anonymize and encrypt one's DNS requests on their machine by leveraging [Tor](https://www.torproject.org) and its DNSPort feature, absolutely prohibiting leaks of requests to your ISP or other network adversaries, plus a locally-running DNS server such as dnsmasq to provide caching (avoiding slowness) and DNSSEC validation.
+Still, one place where privacy has been significantly lacking is in DNS. Each time one makes a connection to a website, the client must first translate the hostname to an IPv4/6 address. It's an old protocol, first standardized by the IETF in 1983 and BIND came out a year later. SSL would not happen for another decade, which so to say that the Domain Name System was not not designed with security in mind. There's no encryption of DNS requests, although the results can be signed with DNSSEC to block tampering or poisoning. The goal of the project is to anonymize and encrypt one's DNS requests on their machine by leveraging [Tor](https://www.torproject.org) and its [DNSPort](https://www.torproject.org/docs/tor-manual.html.en#DNSPort) feature, absolutely prohibiting leaks of requests to your ISP or other network adversaries with [iptables](http://www.netfilter.org/projects/iptables/index.html), plus a locally-running DNS server such as [dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html) to provide caching (avoiding slowness) and DNSSEC validation.
 
 It's presently geared to users of Debian GNU/Linux 9 (stretch). Currently this is just a set of Ansible roles and playbooks, but the long-term plan is a cross-platform program that runs as service and has an accompanying graphical configuration tool.
 
@@ -23,6 +23,8 @@ Here's an overview of the playbooks:
 * security.yml: Provides OS and SSH hardening of the target machine. Requires you to run `ansible-galaxy install --force --ignore-errors -r requirements.yml` in order to obtain the security-related dependencies from [dev-sec.io](http://dev-sec.io)
 * tor-dns-server.yml: Sets up a full-fleged public Tor-based DNS server, with monitoring (explained below) and extra configuration provided by the "common" role.
 * monitoring.yml: Provides a monitoring framework for both Tor and dnsmasq, based on [Prometheus](https://prometheus.io) and [Grafana](https://grafana.com), with which you can collect metrics and build visualizations. You should have previously setup a valid DNS name or A record for the server in `hosts`. A [Let's Encrypt](https://letsencrypt.org) certificate will be generated.
+
+Please consult [NOTES_AND_TODO.md][] for what needs to be imeplemented and explored next.
 
 ## Variables
 
@@ -67,53 +69,45 @@ Edit the hosts inventory at `hosts` and set the IP address for your server. It's
 
 Then you may execute the playbook at `tor-dns-server.yml`.
 
-<center>
 ![][4]
-
+<sub><sup>
 Source: [https://research.google.com/pubs/pub46197.html][5]
-</center>
+</sub></sup>
 
-<center>
 ![][6]
-
+<sub><sup>
 Source: [https://research.google.com/pubs/pub46197.html][5]
-</center>
+</sub></sup>
 
-<center>
 ![][7]
-
+<sub><sup>
 Source: [https://research.google.com/pubs/pub46197.html][5]
-</center>
+</sub></sup>
 
-<center>
 ![][8]
-
+<sub><sup>
 Source: [https://research.google.com/pubs/pub46197.html][5]
-</center>
+</sub></sup>
 
-<center>
 ![][9]
-
+<sub><sup>
 Source: [https://research.google.com/pubs/pub46197.html][5]
-</center>
+</sub></sup>
 
-<center>
 ![][4]
-
+<sub><sup>
 Source: [https://research.google.com/pubs/pub46197.html][5]
-</center>
 
-<center>
+
 ![][10]
-
+<sub><sup>
 Source: [https://research.google.com/pubs/pub46197.html][5]
-</center>
+</sub></sup>
 
-<center>
 ![][11]
-
+<sub><sup>
 Source: [https://scotthelme.co.uk/alexa-top-1-million-analysis-aug-2017/][12]
-</center>
+</sub></sup>
 
 [1]: https://img.cointel.pro/firefox_telemetry.png
 [2]: https://img.cointel.pro/letsencrypt_stats.png
