@@ -31,3 +31,9 @@
     name: tor
     state: restarted
     enabled: yes
+
+ - name: save iptables rules
+   service:
+    name: manage-iptables.service
+    state: reloaded
+    enabled: yes

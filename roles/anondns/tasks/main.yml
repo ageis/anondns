@@ -121,6 +121,38 @@
 - name: flush iptables
   command: iptables -F
 
+- name: Create folder for iptables rules.
+  file:
+    state: directory
+    owner: root
+    group: root
+    path: /etc/network/iptables
+    mode: 0775
+
+- name: Copy manage-iptables systemd service.
+  copy:
+    src: iptables-save.service
+    dest: /etc/systemd/systemd
+
+- name: Enable manage-iptables systemd service.
+  service: manage-iptables.service
+    enabled: yes
+
+- name: Copy resolv.conf to server.
+  copy:
+    src: resolv.conf
+    dest: /etc/resolv.conf
+
+- name: Enable route_localnet and IPv4 packet forwarding.
+  sysctl:
+    name: "{{ item }}"
+    value: 1
+    sysctl_set: yes
+    reload: yes
+  with_items:
+    - "net.ipv4.conf.{{ ansible_default_ipv4.interface }}.route_localnet"
+    - "net.ipv4.ip_forward"
+  
 - name: Direct DNS requests to other servers to ours.
   iptables:
     table: nat
@@ -135,6 +167,7 @@
     - "udp"
     - "tcp"
   tags: iptables
+  notify: save iptables rules
 
 - name: Direct any application besides dnsmasq to use our server.
   iptables:
@@ -149,6 +182,7 @@
     - "udp"
     - "tcp"
   tags: iptables
+  notify: save iptables rules
 
 - name: Direct systemd-resolved to allow connecting to Tor's DNSPort.
   iptables:
@@ -163,6 +197,7 @@
     - "udp"
     - "tcp"
   tags: iptables
+  notify: save iptables rules
 
 #SYSTEMD_LOG_LEVEL=debug
 #sudo systemd-resolve --statistics
@@ -182,16 +217,7 @@
     - "udp"
     - "tcp"
   tags: iptables
-
-- name: Enable route_localnet and IPv4 packet forwarding.
-  sysctl:
-    name: "{{ item }}"
-    value: 1
-    sysctl_set: yes
-    reload: yes
-  with_items:
-    - "net.ipv4.conf.{{ ansible_default_ipv4.interface }}.route_localnet"
-    - "net.ipv4.ip_forward"
+  notify: save iptables rules
 
 - name: Set UFW's default forward policy to accept.
   lineinfile:
@@ -212,6 +238,7 @@
   with_items:
     - udp
     - tcp
-  hen: "public_dns_server"
+  when: "public_dns_server"
   notify: enable ufw
   tags: ufw
+  notify: save iptables rules

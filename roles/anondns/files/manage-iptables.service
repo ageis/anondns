@@ -1,0 +1,16 @@
+[Unit]
+Description=Manage iptables rules
+Before=network.target
+Before=shutdown.target
+DefaultDependencies=yes
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStartPre=/bin/mkdir -p /etc/network/iptables/
+ExecStart=/sbin/iptables-restore -f /etc/network/iptables/rules_v4
+ExecStop=/sbin/iptables-save -f /etc/network/iptables/rules_v4
+ExecReload=/sbin/iptables-save -f /etc/network/iptables/rules_v4
+
+[Install]
+WantedBy=multi-user.target
