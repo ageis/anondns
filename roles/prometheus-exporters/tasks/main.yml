@@ -49,8 +49,8 @@
 
 - name: Install mtail syslog parsing config.
   copy:
-    src: kernel.mtail
-    dest: "/etc/mtail/kernel.mtail"
+    src: syslog.mtail
+    dest: "/etc/mtail/syslog.mtail"
     owner: root
     group: root
     mode: "0644"

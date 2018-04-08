@@ -41,6 +41,7 @@ nameserver_fallbacks: true
 
 # A list in relation to the above setting.
 fallback_nameservers:
+  - "1.1.1.1" # Cloudflare
   - "9.9.9.9" # Quad9
   - "8.8.8.8" # Google
   - "208.67.222.222" # OpenDNS

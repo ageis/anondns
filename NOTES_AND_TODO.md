@@ -1,7 +1,6 @@
-Notes and to-do
----------------
+# Notes and to-do
 
-Make iptables rules save and persist/restore on boot.
+Make iptables rules save and persist/restore on boot. (done)
 
 Make the UI and choose UI framework.
 
@@ -25,11 +24,10 @@ Decide whether queries to upstream fallback servers should still be proxied thro
 
 Testing and benchmarks: resolve massive numbers of domains with [massdns](https://github.com/quirins/massdns)!
 
-
 Other random links:
 
-- http://mayakron.altervista.org/wikibase/show.php?id=AcrylicFAQ
-- https://thesprawl.org/projects/dnschef/
-- https://wiki.archlinux.org/index.php/Tor#Using_TorDNS_for_all_DNS_queries 
-- https://tor.stackexchange.com/questions/7212/how-do-i-resolve-dns-using-tor/14594#14594
-- https://thesprawl.org/projects/dnschef/
+- <http://mayakron.altervista.org/wikibase/show.php?id=AcrylicFAQ>
+- <https://thesprawl.org/projects/dnschef/>
+- <https://wiki.archlinux.org/index.php/Tor#Using_TorDNS_for_all_DNS_queries>
+- <https://tor.stackexchange.com/questions/7212/how-do-i-resolve-dns-using-tor/14594#14594>
+- <https://thesprawl.org/projects/dnschef/>
