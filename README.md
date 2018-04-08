@@ -4,7 +4,7 @@
 
 This project's goal is to anonymize and encrypt outgoing DNS requests. It currently consists of automation code to set up dnsmasq (either locally or public-facing) in combination with Tor which will anonymize all of your outgoing DNS requests. **This is not an official Tor project.**
 
-AnonDNS's target user base are those who are willing to trust [the web PKI][21], running standard Firefox or Chrome with extensions like [HTTPS Eveywhere](https://www.eff.org/https-everywhere) (although the [SNI header][30] still leaks the domain name one is visiting), yet don't want to bother with the Tor Browser, and still would like their DNS lookup activity to be anonymized.
+AnonDNS's target user base are those who are willing to trust [the web PKI][21], running standard Firefox or Chrome with extensions like [HTTPS Everywhere](https://www.eff.org/https-everywhere) (although the [SNI header][30] still leaks the domain name one is visiting), yet don't want to bother with the Tor Browser, and still would like their DNS lookup activity to be anonymized.
 
 In recent years, the world wide web has been making significant and impressive strides in HTTPS adoption. As part of this, Google's Chrome web browser will begin marking plain HTTP sites "insecure" in the user interface later this year. Likewise, Mozilla plans to require secure contexts for most features. The statistics since the advent of Let's Encrypt have been impressive.
 
@@ -13,7 +13,7 @@ In recent years, the world wide web has been making significant and impressive s
 Source: [Let's Encrypt][13]
 </sub></sup>
 
-Still, one place where privacy has been significantly lacking is in DNS. Each time one makes a connection to a website, the client must first translate the hostname to an IPv4/6 address. It's an old protocol, first standardized by the IETF in 1983 and [BIND][16] came out a year later. SSL would not happen for another decade, which is to say that the Domain Name System was not not designed with security in mind. There was originally no encryption of DNS requests, although now the results can be signed with [DNSSEC][18] to block tampering or poisoning. The subject of extensions to the protocol has been explored extensively, such as in IETF papers titled [Pretty Bad Privacy: Pitfalls of DNS Encryption][14] and [Encrypted DNS: An opportunistic encryption protocol extension for DNS][15]. Google, who operates the most popular public open resolvers, provides information about [DNS-over-HTTPS][17]. There's the recent [RFC 8094][3], a Specification for DNS over Datagram Transport Layer Security (DTLS), as well as RFCs [7626][19] and [7858][20]; and a draft for [DNS queries over HTTPS][21]. There were also multiple efforts to related to DANE: RFCs [6698][22], [7218][23], and [7671][24].
+Still, one place where privacy has been significantly lacking is in DNS. Each time one makes a connection to a website, the client must first translate the hostname to an IPv4/6 address. It's an old protocol, first standardized by the IETF in 1983 and [BIND][16] came out a year later. SSL would not happen for another decade, which is to say that the Domain Name System was not not designed with security in mind. There was originally no encryption of DNS requests, although now the results can be signed with [DNSSEC][18] to block tampering or poisoning. The subject of extensions to the protocol has been explored extensively, such as in IETF papers titled [Pretty Bad Privacy: Pitfalls of DNS Encryption][14] and [Encrypted DNS: An opportunistic encryption protocol extension for DNS][15]. Google, who operates the most popular public open resolvers, provides information about [DNS-over-HTTPS][17]. There's the recent [RFC 8094][3], a Specification for DNS over Datagram Transport Layer Security (DTLS), as well as RFCs [7626][19] and [7858][20]; and a draft for [DNS queries over HTTPS][21]. There were also multiple efforts related to DANE: RFCs [6698][22], [7218][23], and [7671][24].
 
 The goal of this particular project is to anonymize and encrypt one's DNS requests on their machine by leveraging [Tor](https://www.torproject.org) and its [DNSPort](https://www.torproject.org/docs/tor-manual.html.en#DNSPort) feature, absolutely prohibiting leaks of requests to your ISP or other network adversaries with [iptables](http://www.netfilter.org/projects/iptables/index.html), plus a locally-running DNS server such as [dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html) to provide caching (avoiding slowness) and DNSSEC validation.
 
@@ -145,7 +145,7 @@ With strict ordering of upstream nameservers enabled, an insecure or an invalid 
 
 The following graph shows that validation rates are higher in Scandinavian countries than, for instance, the United States. Hypothetically, setting [ExitNodes](https://www.torproject.org/docs/tor-manual.html.en#ExitNodes) in `torrc` to some specific country codes, which is usually inadvisable, might be helpful in this instance.
 
-But in general, I have been running this name resolution scheme on my Linux desktop for weeks and encountered no problems at all.
+But in general, I have been running this name resolution scheme on my Linux desktop for weeks without issues.
 
 ![DNSSEC validation rate by country][29]
 <sub><sup>
